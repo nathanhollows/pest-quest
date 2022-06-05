@@ -1,0 +1,17 @@
+# Server configurations
+server:
+  host: "localhost"
+  port: 8802
+  session_key: "1234567890"
+
+# Database credentials
+database:
+  user: "admin"
+  pass: "1234567890"
+  file: "hedge.db"
+
+# Website settings
+frontend:
+  admin: "admin"
+  pass: "1234567890"
+  site_name: "HedgeMen"

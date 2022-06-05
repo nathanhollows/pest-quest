@@ -1,0 +1,44 @@
+{{ define "base" }}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <link rel="stylesheet" href="public/css/style.css?{{stylesheetversion}}">
+    <title>{{ if .title }}{{ .title }} | {{ end }}{{ .siteTitle }}</title>
+</head>
+
+<body>
+    <div id="header">
+        <nav class="container">
+            <ul>
+                {{ $section := "" }}
+                {{ if .section }}{{ $section = .section }}{{ end }}
+                <li>
+                    <a href="{{ .url }}">
+                        Hedgemen Ltd.
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+{{ template "body" .}}
+<footer id="footer">
+    <nav class="container">
+        <ul>
+            <li><a href="{{ url "about" }}">About</a></li>
+            <li><a href="{{ url "privacy" }}">Privacy</a></li>
+            <li><a href="{{ url "admin" }}">Admin</a></li>
+        </ul>
+        <ul>
+            <li id="copyright"><small>©{{ currentYear }} Nathan Hollows</small></li>
+        </ul>
+    </nav>
+</footer>
+</body>
+</html>
+{{ end }}

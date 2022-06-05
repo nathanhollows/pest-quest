@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Hollows"
+  given-names: "Nathan"
+  orcid: "https://orcid.org/0000-0002-1825-5410"
+title: "hedge-men-ltd"
+version: 0.0.1
+date-released: 2022-06-05
+url: "https://github.com/nathanhollows/hedge-men-ltd"
