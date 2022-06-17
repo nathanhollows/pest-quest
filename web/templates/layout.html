@@ -15,11 +15,32 @@
     <div id="header">
         <nav class="container">
             <ul>
-                {{ $section := "" }}
-                {{ if .section }}{{ $section = .section }}{{ end }}
                 <li>
-                    <a href="{{ .url }}">
-                        Hedgemen Ltd.
+                    <a href="{{ url }}">
+                        Pest Quest
+                    </a>
+                </li>
+            </ul>
+            <ul>
+                {{ $section := "" }}{{ if .section }}{{ $section = .section }}{{ end }}
+                <li>
+                    <a href="{{ url "blog" }}">
+                        Blog
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url "leaderboard" }}">
+                        Leaderboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url "about" }}">
+                        About
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url "login" }}" role="button">
+                        Login/Sign up
                     </a>
                 </li>
             </ul>
@@ -30,12 +51,10 @@
 <footer id="footer">
     <nav class="container">
         <ul>
-            <li><a href="{{ url "about" }}">About</a></li>
             <li><a href="{{ url "privacy" }}">Privacy</a></li>
-            <li><a href="{{ url "admin" }}">Admin</a></li>
         </ul>
         <ul>
-            <li id="copyright"><small>©{{ currentYear }} Nathan Hollows</small></li>
+            <li id="copyright"><small>©{{ currentYear }} Sage Barsony</small></li>
         </ul>
     </nav>
 </footer>

@@ -58,6 +58,13 @@ func main() {
 // Set up the routes needed for the game.
 func routes() {
 	router.Handle("/", handlers.HandlePublic{Env: &env, H: handlers.Index})
+	router.Handle("/blog", handlers.HandlePublic{Env: &env, H: handlers.Blog})
+	router.Handle("/about", handlers.HandlePublic{Env: &env, H: handlers.About})
+	router.Handle("/leaderboard", handlers.HandlePublic{Env: &env, H: handlers.Leaderboard})
+	router.Handle("/privacy-and-terms", handlers.HandlePublic{Env: &env, H: handlers.Privacy})
+
+	router.Handle("/login", handlers.HandlePublic{Env: &env, H: handlers.Privacy})
+	router.Handle("/logout", handlers.HandlePublic{Env: &env, H: handlers.Privacy})
 
 	router.Handle("/404", handlers.HandlePublic{Env: &env, H: handlers.Error404})
 	router.NotFound(handlers.NotFound)
