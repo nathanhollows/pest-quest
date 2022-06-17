@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/gorilla/sessions"
-	"github.com/nathanhollows/hedge-men-ltd/internal/config"
-	"github.com/nathanhollows/hedge-men-ltd/internal/helpers"
+	"github.com/nathanhollows/pest-quest/internal/config"
+	"github.com/nathanhollows/pest-quest/internal/helpers"
 	"gorm.io/gorm"
 )
 

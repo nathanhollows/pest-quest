@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/nathanhollows/hedge-men-ltd/internal/domain"
-	"github.com/nathanhollows/hedge-men-ltd/internal/flash"
-	"github.com/nathanhollows/hedge-men-ltd/internal/helpers"
+	"github.com/nathanhollows/pest-quest/internal/domain"
+	"github.com/nathanhollows/pest-quest/internal/flash"
+	"github.com/nathanhollows/pest-quest/internal/helpers"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )

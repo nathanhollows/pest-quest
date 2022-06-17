@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/nathanhollows/hedge-men-ltd/internal/flash"
+	"github.com/nathanhollows/pest-quest/internal/flash"
 )
 
 // NotFound is the 404 handlers.

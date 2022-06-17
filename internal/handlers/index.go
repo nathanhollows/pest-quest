@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/nathanhollows/hedge-men-ltd/internal/flash"
+	"github.com/nathanhollows/pest-quest/internal/flash"
 )
 
 // Index is the homepage of the game.

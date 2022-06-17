@@ -10,9 +10,9 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/gorilla/sessions"
-	"github.com/nathanhollows/hedge-men-ltd/internal/config"
-	"github.com/nathanhollows/hedge-men-ltd/internal/filesystem"
-	"github.com/nathanhollows/hedge-men-ltd/internal/handlers"
+	"github.com/nathanhollows/pest-quest/internal/config"
+	"github.com/nathanhollows/pest-quest/internal/filesystem"
+	"github.com/nathanhollows/pest-quest/internal/handlers"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )

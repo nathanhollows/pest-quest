@@ -1,4 +1,4 @@
-module github.com/nathanhollows/hedge-men-ltd
+module github.com/nathanhollows/pest-quest
 
 go 1.18
 
