@@ -73,6 +73,8 @@ func routes() {
 	router.Handle("/admin/markers/update", handlers.HandleAdmin{Env: &env, H: handlers.MarkersUpdate})
 	router.Handle("/admin/markers/delete", handlers.HandleAdmin{Env: &env, H: handlers.MarkersDelete})
 
+	router.Handle("/login", handlers.HandlePublic{Env: &env, H: handlers.Login})
+	router.Handle("/logout", handlers.HandlePublic{Env: &env, H: handlers.Logout})
 
 	router.Handle("/404", handlers.HandlePublic{Env: &env, H: handlers.Error404})
 	router.NotFound(handlers.NotFound)
