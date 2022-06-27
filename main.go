@@ -62,6 +62,7 @@ func main() {
 func routes() {
 	router.Handle("/", handlers.HandlePublic{Env: &env, H: handlers.Index})
 	router.Handle("/blog", handlers.HandlePublic{Env: &env, H: handlers.Blog})
+	router.Handle("/blog/{title}", handlers.HandlePublic{Env: &env, H: handlers.BlogPost})
 	router.Handle("/about", handlers.HandlePublic{Env: &env, H: handlers.About})
 	router.Handle("/leaderboard", handlers.HandlePublic{Env: &env, H: handlers.Leaderboard})
 	router.Handle("/privacy-and-terms", handlers.HandlePublic{Env: &env, H: handlers.Privacy})
