@@ -1,0 +1,4 @@
+nav a.active {
+    background: var(--primary-focus);
+    color: var(--primary-hover);
+}

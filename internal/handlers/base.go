@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/nathanhollows/pest-quest/internal/config"
 	"github.com/nathanhollows/pest-quest/internal/helpers"
@@ -99,6 +100,14 @@ func (h HandleAdmin) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 var funcs = template.FuncMap{
+	// Compares the activeSection to the checking section.
+	// Prints "active" if the sections match
+	"active": func(activeSection string, checking string) string {
+		if activeSection == checking {
+			return "active"
+		}
+		return ""
+	},
 	"uppercase": func(v string) string {
 		return strings.ToUpper(v)
 	},
@@ -139,14 +148,6 @@ var funcs = template.FuncMap{
 	},
 }
 
-func parse(patterns ...string) *template.Template {
-	patterns = append(patterns, "layout.html", "flash.html")
-	for i := 0; i < len(patterns); i++ {
-		patterns[i] = "web/templates/" + patterns[i]
-	}
-	return template.Must(template.New("base").Funcs(funcs).ParseFiles(patterns...))
-}
-
 func render(w http.ResponseWriter, data map[string]interface{}, patterns ...string) error {
 	w.Header().Set("Content-Type", "text/html")
 	if data["siteTitle"] == nil {
@@ -158,4 +159,48 @@ func render(w http.ResponseWriter, data map[string]interface{}, patterns ...stri
 		log.Print("Template executing error: ", err)
 	}
 	return err
+}
+
+func parse(patterns ...string) *template.Template {
+	for i := 0; i < len(patterns); i++ {
+		patterns[i] = "web/templates/public/" + patterns[i]
+	}
+	patterns = append(patterns, "web/templates/public/layout.html", "web/templates/partials/flash.html")
+	return template.Must(template.New("base").Funcs(funcs).ParseFiles(patterns...))
+}
+
+// TODO: Abstract this out so it is automatic
+func renderAdmin(w http.ResponseWriter, data map[string]interface{}, patterns ...string) error {
+	w.Header().Set("Content-Type", "text/html")
+	if data["siteTitle"] == nil {
+		data["siteTitle"] = config.Cfg.Frontend.SiteName
+	}
+	err := parseAdmin(patterns...).ExecuteTemplate(w, "base", data)
+	if err != nil {
+		http.Error(w, err.Error(), 0)
+		log.Print("Template executing error: ", err)
+	}
+	return err
+}
+
+func parseAdmin(patterns ...string) *template.Template {
+	for i := 0; i < len(patterns); i++ {
+		patterns[i] = "web/templates/" + patterns[i]
+	}
+	patterns = append(patterns, "web/templates/admin/layout.html", "web/templates/partials/flash.html")
+	return template.Must(template.New("base").Funcs(funcs).ParseFiles(patterns...))
+}
+
+func startSession(s sessions.Store, r *http.Request, w http.ResponseWriter) (*sessions.Session, error) {
+	session, err := s.Get(r, "uid")
+	if err != nil || session.Values["id"] == nil {
+		session, err = s.New(r, "uid")
+		session.Options.HttpOnly = true
+		session.Options.SameSite = http.SameSiteStrictMode
+		session.Options.Secure = true
+		id := uuid.New()
+		session.Values["id"] = id.String()
+		session.Save(r, w)
+	}
+	return session, err
 }
