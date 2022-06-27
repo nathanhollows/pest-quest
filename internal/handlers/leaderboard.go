@@ -14,7 +14,7 @@ func Leaderboard(env *Env, w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "text/html")
 	data := make(map[string]interface{})
 	data["messages"] = flash.Get(w, r)
-	data["section"] = "about"
+	data["section"] = "leaderboard"
 
 	session, err := env.Session.Get(r, "uid")
 	if err != nil || session.Values["id"] == nil {
