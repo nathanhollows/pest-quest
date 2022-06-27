@@ -11,6 +11,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/gorilla/sessions"
 	"github.com/nathanhollows/pest-quest/internal/config"
+	"github.com/nathanhollows/pest-quest/internal/domain"
 	"github.com/nathanhollows/pest-quest/internal/filesystem"
 	"github.com/nathanhollows/pest-quest/internal/handlers"
 	"gorm.io/driver/sqlite"
@@ -41,7 +42,7 @@ func init() {
 }
 
 func main() {
-	// env.DB.AutoMigrate(
+	env.DB.AutoMigrate(
 	// 	&models.Poll{},
 	// 	&models.Admin{},
 	// 	&models.ScanEvent{},
@@ -49,8 +50,10 @@ func main() {
 	// 	&models.Page{},
 	// 	&models.Trail{},
 	// 	&models.Gallery{},
-	// 	&models.Library{},
-	// )
+		&domain.Blog{},
+		&domain.Marker{},
+		&domain.MarkerType{},
+	)
 	routes()
 	fmt.Println(http.ListenAndServe(":"+config.Cfg.Server.Port, router))
 }
