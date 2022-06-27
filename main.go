@@ -67,8 +67,12 @@ func routes() {
 	router.Handle("/leaderboard", handlers.HandlePublic{Env: &env, H: handlers.Leaderboard})
 	router.Handle("/privacy-and-terms", handlers.HandlePublic{Env: &env, H: handlers.Privacy})
 
-	router.Handle("/login", handlers.HandlePublic{Env: &env, H: handlers.Privacy})
-	router.Handle("/logout", handlers.HandlePublic{Env: &env, H: handlers.Privacy})
+	router.Handle("/admin/markers", handlers.HandleAdmin{Env: &env, H: handlers.MarkersIndex})
+	router.Handle("/admin/markers/add", handlers.HandleAdmin{Env: &env, H: handlers.MarkersCreate})
+	router.Handle("/admin/markers/edit/{id}", handlers.HandleAdmin{Env: &env, H: handlers.MarkersEdit})
+	router.Handle("/admin/markers/update", handlers.HandleAdmin{Env: &env, H: handlers.MarkersUpdate})
+	router.Handle("/admin/markers/delete", handlers.HandleAdmin{Env: &env, H: handlers.MarkersDelete})
+
 
 	router.Handle("/404", handlers.HandlePublic{Env: &env, H: handlers.Error404})
 	router.NotFound(handlers.NotFound)
