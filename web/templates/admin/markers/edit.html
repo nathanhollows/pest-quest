@@ -1,0 +1,229 @@
+{{ define "body" }}
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+<main class="container">
+    {{ template "flash" . }}
+    
+    <form method="POST" id="form" action={{url "/admin/markers/update"}}>
+        <div role="document">
+            <section>
+                <hgroup>
+                    <h1>{{ .marker.Name }}</h1>
+                    <h2>Edit a marker</h2>
+                </hgroup>
+                <input name="id" value="{{ .marker.ID }}" id="id" type="hidden">
+                <div>
+                    <label for="name">Marker Name</label>
+                    <input type="text" id="name" name="name" value="{{.marker.Name}}" autocomplete="off">
+                </div>
+                <div>
+                    <div id="map"></div>
+                </div>
+                <div class="grid">
+                    <div>
+                        <label for="lng">Longitude</label>
+                        <input type="text" id="lng" name="lng" value="{{.marker.Lng}}" autocomplete="off">
+                    </div>
+                    <div>
+                        <label for="lat">Latitude</label>
+                        <input type="text" id="lat" name="lat" value="{{.marker.Lat}}" autocomplete="off">
+                    </div>
+                </div>
+                <div>
+                    <label for="text">Content (Optional)</label>
+                    <textarea id="text" name="text" rows="3">{{.marker.Text}}</textarea>
+                </div>
+                <div>
+                    <label for="url">Link (Optional)</label>
+                    <input type="text" id="url" name="url" value="{{.marker.URL}}" autocomplete="off">
+                </div>
+                
+            </section>
+        </div>
+        <aside>
+            <h1></h1>
+            <p id="autosave">
+                <em data-tooltip="This page will autosave">Last edited {{ .marker.UpdatedAt.Format "Jan 02, 2006" }}</em>
+            </p>
+            
+            <hr>
+            
+            
+            <fieldset>
+                <label for="publish">
+                    <input type="checkbox" id="publish" name="publish" {{ if .marker.Published }}checked{{end}}>
+                    Published
+                </label>
+            </fieldset>
+            
+            <hr>
+            
+            <fieldset>
+                <legend>Type</legend>
+                {{ range .types }}
+                <label for="type{{.ID}}">
+                    <input type="radio" id="type{{.ID}}" name="type" value="{{ .ID }}" {{ if eq .ID $.marker.TypeID}}checked{{ end }}>
+                    <img src="{{url (print "/public/img/" .Icon ".svg")}}">
+                    {{ .Name }}
+                </label>
+                {{ end }}
+            </fieldset>
+            
+            <hr>
+            
+            ID:
+            {{ .marker.ID }}
+            
+            <hr>
+            
+            <button id="delete" class="secondary" name="delete" value="true">Delete Marker</button>
+            <button id="save" class="primary" name="save" type="submit">Save Marker</button>
+            
+        </aside>
+    </form>
+</main>
+
+<style>
+    #map {
+        height: 400px;
+    }
+    .mapboxgl-popup-close-button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        border: 0;
+        border-radius: 0 3px 0 0;
+        cursor: pointer;
+        background-color: transparent;
+        width: revert;
+        height: revert;
+        padding: 0.2em 0.6em;
+        color: black;
+    }
+    @media (min-width:992px) {
+        
+        main > form {
+            --block-spacing-horizontal: calc(var(--spacing) * 1.75);
+            grid-column-gap: calc(var(--block-spacing-horizontal) * 2);
+            display: grid;
+            grid-template-columns: auto 300px;
+        }
+    }
+    
+    label[for=content] {
+        display: inline-block;
+    }
+    #content {
+        resize: vertical;
+    }
+</style>
+
+<script>
+    document.getElementById("switch").checked = false;
+    var checkBox = document.getElementById("switch");
+    var textarea = document.getElementById("content");
+    var preview = document.getElementById("preview-content");
+    var form = document.getElementById("form");
+    var autosave = document.getElementById("autosave");
+    let typingTimer;
+    let doneTypingInterval = 2000;
+    
+    inputs = document.forms["form"].querySelectorAll("textarea,input")
+    for(var i = 0; i < inputs.length; i++) {
+        if (inputs[i].name == 'image') {
+            inputs[i].addEventListener('change', event => {
+                autosave.setAttribute("aria-busy", true)
+                uploadImage().then(data => updateCover(data))
+            });
+        } else if (inputs[i].type.toLowerCase() == 'radio' || inputs[i].type.toLowerCase() == 'checkbox') {
+            inputs[i].addEventListener('click', event => {
+                if (event.target.name != "switch" && typeof event.target.type != "undefined") {
+                    doneTyping()
+                }
+            });
+        } else {
+            inputs[i].addEventListener('keyup', event => {
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(doneTyping, doneTypingInterval);
+            });
+        }
+    }
+    
+    
+    form.addEventListener('keyup', event => {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    });
+    
+    function doneTyping () {
+        var xhr = new XMLHttpRequest();
+        xhr.open("PATCH", "", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        let formData = new FormData(form)
+        let reqBody = {};
+        for (let pair of formData.entries()) {
+            reqBody[pair[0]] = pair[1];
+        }
+        xhr.send(urlencodeFormData(formData));
+        autosave.children[0].innerText = "Saving..."
+        autosave.setAttribute("aria-busy", true)
+        
+        xhr.onreadystatechange = async (e) => {
+            await new Promise(r => setTimeout(r, 500));
+            if (xhr.status == 200) {
+                autosave.children[0].innerText = "Last saved: " + new Date().toLocaleTimeString()
+                autosave.setAttribute("aria-busy", false)
+            } else {
+                autosave.children[0].innerText = "Something went wrong. Please check your connection."
+                autosave.setAttribute("aria-busy", false)
+            }
+        }
+        
+    }
+    
+    function urlencodeFormData(fd){
+        var s = '';
+        function encode(s){ return encodeURIComponent(s).replace(/%20/g,'+'); }
+        for(var pair of fd.entries()){
+            if(typeof pair[1]=='string'){
+                s += (s?'&':'') + encode(pair[0])+'='+encode(pair[1]);
+            }
+        }
+        return s;
+    }
+    
+</script>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibmF0aGFuaG9sbG93cyIsImEiOiJjazIzMzRuNHAwMGVnM2lxaGEwbTNwNGQyIn0.vsjlOi_SpKog-zkBxKW0HQ';
+    const center = [{{ .marker.Lng }}, {{ .marker.Lat}}];
+    const bounds = [
+    [170.51024319050157, -45.86513865002886], // Southwest coordinates
+    [170.53409439318165, -45.852562310611155] // Northeast coordinates
+    ];
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: center,
+        zoom: 16,
+        maxBounds: bounds
+    });
+    
+    const marker1 = new mapboxgl.Marker()
+    .setLngLat(center)
+    .addTo(map);
+    
+    map.on('style.load', function() {
+        map.on('click', function(e) {
+            var coordinates = e.lngLat;
+            new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(coordinates)
+            .addTo(map)
+            .setHTML('New location: <br/>' + coordinates);
+            document.getElementById("lng").value = e.lngLat.lng;
+            document.getElementById("lat").value = e.lngLat.lat;
+        });
+    });
+</script>
+{{ end }}

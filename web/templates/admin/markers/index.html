@@ -1,0 +1,39 @@
+{{ define "body" }}
+<main class="container">
+    {{ template "flash" . }}
+    <h1>Markers</h1>
+    <p>
+        <a href="{{ url "/admin/markers/add" }}" role="button">Add a Marker</a>
+    </p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Location</th>
+                <th scope="col">Type</th>
+                <th scope="col">Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .markers }}
+            <tr>
+                <th scope="row">{{ .ID }}</th>
+                <td>{{ .Name }}</td>
+                <td>{{ .Type.Name }}</td>
+                <td><a href="{{ url (print "/admin/markers/edit/" .ID) }}">Edit</a></td>
+            </tr>
+            {{ end }}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Location</th>
+                <th scope="col">Type</th>
+                <th scope="col">Edit</th>
+            </tr>
+        </tfoot>
+    </table>
+    
+</main>
+{{ end }}

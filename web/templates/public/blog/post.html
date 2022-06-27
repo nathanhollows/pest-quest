@@ -1,0 +1,10 @@
+{{ define "body" }}
+<main class="container">
+    {{ template "flash" . }}
+
+    <h1>{{ .post.Title }}</h1>
+    <p>{{ .post.Content }}</p>
+    <a href="{{ .post.GetURL }}">Read More</a>
+    <p>{{ .post.Author }}</p>
+</main>
+{{ end }}
