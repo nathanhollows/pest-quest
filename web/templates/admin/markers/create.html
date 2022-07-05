@@ -62,7 +62,7 @@
                 {{ range .types }}
                 <label for="type{{.ID}}">
                     <input type="radio" id="type{{.ID}}" name="type" value="{{ .ID }}" {{ if eq .ID $.marker.TypeID}}checked{{ end }}>
-                    <img src="{{url (print "/public/img/" .Icon ".svg")}}">
+                    {{ svg .Icon true }}
                     {{ .Name }}
                 </label>
                 {{ end }}

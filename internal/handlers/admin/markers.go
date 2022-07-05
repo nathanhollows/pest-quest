@@ -1,4 +1,4 @@
-package handlers
+package admin
 
 import (
 	"fmt"
@@ -7,12 +7,13 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/nathanhollows/pest-quest/internal/domain"
 	"github.com/nathanhollows/pest-quest/internal/flash"
+	"github.com/nathanhollows/pest-quest/internal/handlers"
 	"github.com/nathanhollows/pest-quest/internal/helpers"
 	"gorm.io/gorm/clause"
 )
 
 // Markers allows markers to be added or removed from the map.
-func MarkersIndex(env *Env, w http.ResponseWriter, r *http.Request) error {
+func MarkersIndex(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
 	data := make(map[string]interface{})
 	data["messages"] = flash.Get(w, r)
 	data["section"] = "markers"
@@ -21,11 +22,11 @@ func MarkersIndex(env *Env, w http.ResponseWriter, r *http.Request) error {
 	env.DB.Preload(clause.Associations).Find(&markers)
 	data["markers"] = markers
 
-	return renderAdmin(w, data, "admin/markers/index.html")
+	return handlers.RenderAdmin(w, data, "admin/markers/index.html")
 }
 
 // MarkersAdd shows the form for adding a new marker.
-func MarkersCreate(env *Env, w http.ResponseWriter, r *http.Request) error {
+func MarkersCreate(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
 	data := make(map[string]interface{})
 	data["messages"] = flash.Get(w, r)
 	data["section"] = "markers"
@@ -44,11 +45,11 @@ func MarkersCreate(env *Env, w http.ResponseWriter, r *http.Request) error {
 		}
 	}
 
-	return renderAdmin(w, data, "admin/markers/create.html")
+	return handlers.RenderAdmin(w, data, "admin/markers/create.html")
 }
 
 // Markers allows markers to be added or removed from the map.
-func MarkersEdit(env *Env, w http.ResponseWriter, r *http.Request) error {
+func MarkersEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
 	data := make(map[string]interface{})
 	data["section"] = "markers"
 
@@ -75,11 +76,11 @@ func MarkersEdit(env *Env, w http.ResponseWriter, r *http.Request) error {
 		}
 	}
 
-	return renderAdmin(w, data, "admin/markers/edit.html")
+	return handlers.RenderAdmin(w, data, "admin/markers/edit.html")
 }
 
 // MarkersUpdate saves the new values of a marker
-func MarkersUpdate(env *Env, w http.ResponseWriter, r *http.Request) error {
+func MarkersUpdate(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
 	// If the form has been submitted
 	if r.Method == http.MethodPost {
 		r.ParseForm()
@@ -89,7 +90,7 @@ func MarkersUpdate(env *Env, w http.ResponseWriter, r *http.Request) error {
 		if res.RowsAffected == 0 || res.Error != nil {
 			flash.Set(w, r, flash.Message{Message: "The marker could not be found", Title: "Something went wrong"})
 			fmt.Println("Could not find")
-			return Error404(env, w, r)
+			return handlers.Error404(env, w, r)
 		}
 
 		marker.Parse(r.PostForm, &env.DB)
@@ -103,14 +104,14 @@ func MarkersUpdate(env *Env, w http.ResponseWriter, r *http.Request) error {
 		http.Redirect(w, r, helpers.URL(url), http.StatusSeeOther)
 		return nil
 	}
-	return Error404(env, w, r)
+	return handlers.Error404(env, w, r)
 }
 
 // MarkersDelete removes a marker from the map.
-func MarkersDelete(env *Env, w http.ResponseWriter, r *http.Request) error {
+func MarkersDelete(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
 	data := make(map[string]interface{})
 	data["messages"] = flash.Get(w, r)
 	data["section"] = "markers"
 
-	return renderAdmin(w, data, "admin/markers/index.html")
+	return handlers.RenderAdmin(w, data, "admin/markers/index.html")
 }

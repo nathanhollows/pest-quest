@@ -10,8 +10,9 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Location</th>
+                <th scope="col" style="text-align: center;" data-tooltip="Published">{{ svg "eye" true}}</th>
                 <th scope="col">Type</th>
+                <th scope="col">Location</th>
                 <th scope="col">Edit</th>
             </tr>
         </thead>
@@ -19,8 +20,13 @@
             {{ range .markers }}
             <tr>
                 <th scope="row">{{ .ID }}</th>
-                <td>{{ .Name }}</td>
-                <td>{{ .Type.Name }}</td>
+                <td style="text-align: center;">{{if .Published }}✔{{end}}</td>
+                <td>{{ svg .Type.Icon true }} {{ .Type.Name }}</td>
+                <td>
+                    <a href="{{ url (print "/admin/markers/edit/" .ID) }}">
+                        {{ .Name }}
+                    </a>
+                </td>
                 <td><a href="{{ url (print "/admin/markers/edit/" .ID) }}">Edit</a></td>
             </tr>
             {{ end }}
@@ -28,8 +34,9 @@
         <tfoot>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Location</th>
+                <th scope="col" style="text-align: center;" data-tooltip="Published">{{ svg "eye" true}}</th>
                 <th scope="col">Type</th>
+                <th scope="col">Location</th>
                 <th scope="col">Edit</th>
             </tr>
         </tfoot>

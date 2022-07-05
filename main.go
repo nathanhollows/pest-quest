@@ -14,6 +14,7 @@ import (
 	"github.com/nathanhollows/pest-quest/internal/domain"
 	"github.com/nathanhollows/pest-quest/internal/filesystem"
 	"github.com/nathanhollows/pest-quest/internal/handlers"
+	"github.com/nathanhollows/pest-quest/internal/handlers/admin"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -43,12 +44,12 @@ func init() {
 
 func main() {
 	env.DB.AutoMigrate(
-	// 	&models.Poll{},
-	// 	&models.Admin{},
-	// 	&models.ScanEvent{},
-	// 	&models.User{},
-	// 	&models.Trail{},
-	// 	&models.Gallery{},
+		// 	&models.Poll{},
+		// 	&models.Admin{},
+		// 	&models.ScanEvent{},
+		// 	&models.User{},
+		// 	&models.Trail{},
+		// 	&models.Gallery{},
 		&domain.Page{},
 		&domain.Blog{},
 		&domain.Marker{},
@@ -67,6 +68,11 @@ func routes() {
 	router.Handle("/leaderboard", handlers.HandlePublic{Env: &env, H: handlers.Leaderboard})
 	router.Handle("/privacy-and-terms", handlers.HandlePublic{Env: &env, H: handlers.Privacy})
 
+	router.Handle("/admin/markers", handlers.HandleAdmin{Env: &env, H: admin.MarkersIndex})
+	router.Handle("/admin/markers/add", handlers.HandleAdmin{Env: &env, H: admin.MarkersCreate})
+	router.Handle("/admin/markers/edit/{id}", handlers.HandleAdmin{Env: &env, H: admin.MarkersEdit})
+	router.Handle("/admin/markers/update", handlers.HandleAdmin{Env: &env, H: admin.MarkersUpdate})
+	router.Handle("/admin/markers/delete", handlers.HandleAdmin{Env: &env, H: admin.MarkersDelete})
 
 	router.Handle("/admin/blog", handlers.HandleAdmin{Env: &env, H: admin.BlogIndex})
 	router.Handle("/admin/blog/create", handlers.HandleAdmin{Env: &env, H: admin.BlogCreate})
