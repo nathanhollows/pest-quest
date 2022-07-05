@@ -1,0 +1,39 @@
+{{ define "body" }}
+<main class="container">
+    <section id="actions">
+        <h1>Blog</h1>
+        <a href="{{ url "admin/blog/create" }}" role="button">Create</a>
+    </section>
+    {{ template "flash" . }}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" style="text-align: center;" data-tooltip="Published">{{ svg "eye" true}}</th>
+                <th scope="col">Title</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .blogs}}
+            <tr>
+                <td style="text-align: center;">{{if .Published }}✔{{end}}</td>
+                <td>
+                    <a href="{{ url (print "admin/blog/edit/" .URL) }}">
+                        {{ .Title }}
+                    </a>
+                <td>
+                    <a href="{{ url (print "blog/" .URL) }}" target="_blank">View</a> |
+                </td>
+            </tr>
+            {{ end }}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th scope="col" style="text-align: center;" data-tooltip="Published">{{ svg "eye" true}}</th>
+                <th scope="col">Title</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </tfoot>
+    </table>
+</main>
+{{ end }}

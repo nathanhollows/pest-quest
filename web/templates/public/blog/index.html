@@ -1,12 +1,15 @@
 {{ define "body" }}
 <main class="container">
     {{ template "flash" . }}
-
+    
     {{ range .posts }}
-    <h1>{{ .Title }}</h1>
-    <p>{{ .Content }}</p>
-    <a href="{{ .GetURL }}">Read More</a>
-    <p>{{ .Author }}</p>
+    <article>
+        <h1>{{ .Title }}</h1>
+        <p>{{ .Content }}</p>
+        <footer>
+            <a href="{{ .GetURL }}">Read More</a>
+        </footer>
+    </article>
     {{ end }}
 </main>
 {{ end }}

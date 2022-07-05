@@ -47,9 +47,9 @@ func main() {
 	// 	&models.Admin{},
 	// 	&models.ScanEvent{},
 	// 	&models.User{},
-	// 	&models.Page{},
 	// 	&models.Trail{},
 	// 	&models.Gallery{},
+		&domain.Page{},
 		&domain.Blog{},
 		&domain.Marker{},
 		&domain.MarkerType{},
@@ -67,11 +67,13 @@ func routes() {
 	router.Handle("/leaderboard", handlers.HandlePublic{Env: &env, H: handlers.Leaderboard})
 	router.Handle("/privacy-and-terms", handlers.HandlePublic{Env: &env, H: handlers.Privacy})
 
-	router.Handle("/admin/markers", handlers.HandleAdmin{Env: &env, H: handlers.MarkersIndex})
-	router.Handle("/admin/markers/add", handlers.HandleAdmin{Env: &env, H: handlers.MarkersCreate})
-	router.Handle("/admin/markers/edit/{id}", handlers.HandleAdmin{Env: &env, H: handlers.MarkersEdit})
-	router.Handle("/admin/markers/update", handlers.HandleAdmin{Env: &env, H: handlers.MarkersUpdate})
-	router.Handle("/admin/markers/delete", handlers.HandleAdmin{Env: &env, H: handlers.MarkersDelete})
+
+	router.Handle("/admin/blog", handlers.HandleAdmin{Env: &env, H: admin.BlogIndex})
+	router.Handle("/admin/blog/create", handlers.HandleAdmin{Env: &env, H: admin.BlogCreate})
+	router.Handle("/admin/blog/edit/{url}", handlers.HandleAdmin{Env: &env, H: admin.BlogEdit})
+	router.Handle("/admin/blog/delete", handlers.HandleAdmin{Env: &env, H: admin.BlogDelete})
+
+	router.Handle("/admin/md/preview", handlers.HandleAdmin{Env: &env, H: admin.PreviewMD})
 
 	router.Handle("/login", handlers.HandlePublic{Env: &env, H: handlers.Login})
 	router.Handle("/logout", handlers.HandlePublic{Env: &env, H: handlers.Logout})
