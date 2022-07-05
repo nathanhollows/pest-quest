@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -143,6 +144,20 @@ var funcs = template.FuncMap{
 		modifiedtime := file.ModTime().Nanosecond()
 		return fmt.Sprint(modifiedtime)
 	},
+	"svg": func(icon string, inline bool) template.HTML {
+		if inline {
+			path := fmt.Sprint("web/static/img/icons/", icon, ".svg")
+			file, err := os.Open(path)
+			if err != nil {
+				return "ERROR: Icon does not exist"
+			}
+			b, _ := ioutil.ReadAll(file)
+			return template.HTML(b)
+		} else {
+			url := helpers.URL(fmt.Sprint("/public/img/icons/", icon, ".svg"))
+			return template.HTML(url)
+		}
+	},
 	"unescape": func(s string) template.HTML {
 		return template.HTML(s)
 	},
@@ -170,7 +185,7 @@ func parse(patterns ...string) *template.Template {
 }
 
 // TODO: Abstract this out so it is automatic
-func renderAdmin(w http.ResponseWriter, data map[string]interface{}, patterns ...string) error {
+func RenderAdmin(w http.ResponseWriter, data map[string]interface{}, patterns ...string) error {
 	w.Header().Set("Content-Type", "text/html")
 	if data["siteTitle"] == nil {
 		data["siteTitle"] = config.Cfg.Frontend.SiteName

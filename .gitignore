@@ -18,3 +18,4 @@ pest-quest
 
 # Misc
 db.db
+web/static/img/icons/*.svg
