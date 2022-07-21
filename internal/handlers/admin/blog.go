@@ -82,7 +82,7 @@ func BlogUpdate(env *handlers.Env, w http.ResponseWriter, r *http.Request) error
 	if r.Method == http.MethodPost {
 		r.ParseForm()
 
-		marker := domain.Marker{}
+		marker := domain.Location{}
 		res := env.DB.Where("id = ?", r.Form.Get("id")).Find(&marker)
 		if res.RowsAffected == 0 || res.Error != nil {
 			flash.Set(w, r, flash.Message{Message: "The marker could not be found", Title: "Something went wrong"})

@@ -18,7 +18,7 @@ func MarkersIndex(env *handlers.Env, w http.ResponseWriter, r *http.Request) err
 	data["messages"] = flash.Get(w, r)
 	data["section"] = "markers"
 
-	var markers []domain.Marker
+	var markers []domain.Location
 	env.DB.Preload(clause.Associations).Find(&markers)
 	data["markers"] = markers
 
@@ -37,7 +37,7 @@ func MarkersCreate(env *handlers.Env, w http.ResponseWriter, r *http.Request) er
 
 	if r.Method == http.MethodPost {
 		r.ParseForm()
-		marker := domain.Marker{}
+		marker := domain.Location{}
 		marker.Parse(r.PostForm, &env.DB)
 		res := env.DB.Model(&marker).Save(&marker)
 		if res.Error != nil {
@@ -53,7 +53,7 @@ func MarkersEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) erro
 	data := make(map[string]interface{})
 	data["section"] = "markers"
 
-	marker := domain.Marker{}
+	marker := domain.Location{}
 	res := env.DB.Where("id = ?", chi.URLParam(r, "id")).Find(&marker)
 	if res.RowsAffected == 0 || res.Error != nil {
 		flash.Set(w, r, flash.Message{Message: "The marker could not be found", Title: "Something went wrong"})
@@ -85,7 +85,7 @@ func MarkersUpdate(env *handlers.Env, w http.ResponseWriter, r *http.Request) er
 	if r.Method == http.MethodPost {
 		r.ParseForm()
 
-		marker := domain.Marker{}
+		marker := domain.Location{}
 		res := env.DB.Where("id = ?", r.Form.Get("id")).Find(&marker)
 		if res.RowsAffected == 0 || res.Error != nil {
 			flash.Set(w, r, flash.Message{Message: "The marker could not be found", Title: "Something went wrong"})

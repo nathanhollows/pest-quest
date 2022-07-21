@@ -47,12 +47,12 @@ func main() {
 		// 	&models.Poll{},
 		// 	&models.Admin{},
 		// 	&models.ScanEvent{},
-		// 	&models.User{},
-		// 	&models.Trail{},
 		// 	&models.Gallery{},
+		&domain.User{},
+		&domain.Trail{},
 		&domain.Page{},
 		&domain.Blog{},
-		&domain.Marker{},
+		&domain.Location{},
 		&domain.MarkerType{},
 	)
 	routes()
@@ -73,6 +73,8 @@ func routes() {
 	router.Handle("/admin/markers/edit/{id}", handlers.HandleAdmin{Env: &env, H: admin.MarkersEdit})
 	router.Handle("/admin/markers/update", handlers.HandleAdmin{Env: &env, H: admin.MarkersUpdate})
 	router.Handle("/admin/markers/delete", handlers.HandleAdmin{Env: &env, H: admin.MarkersDelete})
+
+	router.Handle("/admin/trails", handlers.HandleAdmin{Env: &env, H: admin.TrailsIndex})
 
 	router.Handle("/admin/blog", handlers.HandleAdmin{Env: &env, H: admin.BlogIndex})
 	router.Handle("/admin/blog/create", handlers.HandleAdmin{Env: &env, H: admin.BlogCreate})
