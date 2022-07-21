@@ -168,6 +168,10 @@ func render(w http.ResponseWriter, data map[string]interface{}, patterns ...stri
 	if data["siteTitle"] == nil {
 		data["siteTitle"] = config.Cfg.Frontend.SiteName
 	}
+	if data["section"] == nil {
+		data["section"] = "error"
+		log.Println("Section is not set. \t Patterns: ", patterns)
+	}
 	err := parse(patterns...).ExecuteTemplate(w, "base", data)
 	if err != nil {
 		http.Error(w, err.Error(), 0)
