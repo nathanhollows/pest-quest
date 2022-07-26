@@ -1,0 +1,240 @@
+{{ define "body" }}
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+<style>
+    body { margin: 0; padding: 0; }
+    #map { 
+        position: absolute; 
+        top: 0; 
+        bottom: 0; 
+        width: 100%; 
+        z-index: -1;
+    }
+    #footer {
+        display: none;
+    }
+    
+    .marker {
+        background-size: cover;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+    }
+    
+    .marker.flower3 {
+        background-image: url('{{ svg "flower3" false }}');
+    }
+    
+    .marker.question-lg {
+        background-image: url('{{ svg "question-lg" false }}');
+    }
+    
+    .marker.geo-fill {
+        background-image: url('{{ svg "geo-fill" false }}');
+    }
+    
+    .marker.exclamation-diamond-fill {
+        background-image: url('{{ svg "exclamation-diamond-fill" false }}');
+    }
+    
+    .mapboxgl-popup {
+        max-width: 200px;
+    }
+    
+    .mapboxgl-popup-close-button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        border: 0;
+        border-radius: 0 3px 0 0;
+        cursor: pointer;
+        background-color: transparent;
+        width: revert;
+        height: revert;
+        padding: 0.2em 0.6em;
+        color: black;
+    }
+    
+    
+    /* mapbox-gl.css | https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css */
+    
+    .mapboxgl-popup-content {
+        /* background: #fff; */
+        background: var(--background-color);
+    }
+    
+    .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+        /* border-top-color: #fff; */
+        border-top-color: var(--background-color);
+    }
+    
+    /* Inline #4 | http://localhost:8803/ */
+    
+    .mapboxgl-popup-close-button {
+        color: inherit;
+    }
+    
+    .mapboxgl-popup-content {
+        color: var(--color);
+    }
+    
+    
+    /* mapbox-gl.css | https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css */
+    
+    .mapboxgl-popup-content {
+        /* border-radius: 3px; */
+        /* padding: 10px 10px 15px; */
+        border-radius: var(--border-radius);
+        padding: var(--spacing) 1.9em;
+        font-size: var(--font-size);
+    }
+    
+    /* Inline #4 | http://localhost:8803/ */
+    
+    .mapboxgl-popup-close-button {
+        /* padding: 0.2em 0.6em; */
+        /* padding: calc(var(--spacing); */
+        /* padding: calc(var(--spacing)/inherit; */
+        /* padding: calc(var(--spacing)/4; */
+        margin: 0 0;
+        padding: 0.8em 0.5em;
+        line-height: 0;
+    }
+    
+    /* Element | http://localhost:8803/ */
+    
+    .mapboxgl-popup {
+        /* max-width: 240px; */
+        max-width: 30ch;
+    }
+    
+    /* Element | http://localhost:8803/ */
+    
+    .mapboxgl-popup {
+        /* max-width: 240px; */
+        max-width: 30ch;
+    }
+    
+</style>
+
+<div id="map"></div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibmF0aGFuaG9sbG93cyIsImEiOiJjazIzMzRuNHAwMGVnM2lxaGEwbTNwNGQyIn0.vsjlOi_SpKog-zkBxKW0HQ';
+    const center = [170.5213798,-45.8588689];
+    const bounds = [
+    [170.51024319050157, -45.86513865002886], // Southwest coordinates
+    [170.53409439318165, -45.852562310611155] // Northeast coordinates
+    ];
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: center,
+        zoom: 16,
+        maxBounds: bounds
+    });
+    
+    const markers = [
+    {{ range .markers }}
+    [[{{.Lng}}, {{.Lat}}], {{.Text}}, {{.Type.Icon}}],
+    {{ end }}
+    ];
+    
+    markers.forEach(function(element, index, array) {
+        // create the popup
+        const popup = new mapboxgl.Popup({ offset: 25 })
+        
+        if (element[1] != "") {
+            popup.setText(element[1]);  
+        }
+        
+        const el = document.createElement('svg');
+        el.className = 'marker ' + element[2];
+        new mapboxgl.Marker(el)
+        .setLngLat(element[0])
+        .setPopup(popup) // sets a popup on this marker
+        .addTo(map);
+    });
+    
+    map.on('load', () => {
+        map.addSource('places', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                        '<strong>Muhsinah</strong><p>Jazz-influenced hip hop artist Muhsinah plays the Black Cat (1811 14th Street NW) tonight with Exit Clov and Gods’illa. 9:00 p.m. $12.</p>'
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [170.52138136460565, -45.85790816852136]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                        "<strong>A Little Night Music</strong><p>The Arlington Players' production of Stephen Sondheim's <em>A Little Night Music</em> comes to the Kogod Cradle at The Mead Center for American Theater (1101 6th Street SW) this weekend and next. 8:00 p.m.</p>"
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [170.52558706834088, -45.85805760816999]
+                    }
+                }
+                ]
+            }
+        });
+        
+        map.addLayer({
+            'id': 'places',
+            'type': 'circle',
+            'source': 'places',
+            'paint': {
+                'circle-color': '#0097A7',
+                'circle-radius': 6,
+                'circle-stroke-width': 2,
+                'circle-stroke-color': '#ffffff'
+            }
+        });
+        
+        // Create a popup, but don't add it to the map yet.
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: true
+        });
+        
+        map.on('mouseenter', 'places', (e) => {
+            // Change the cursor style as a UI indicator.
+            map.getCanvas().style.cursor = 'pointer';
+            
+            // Copy coordinates array.
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const description = e.features[0].properties.description;
+            
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+            
+            // Populate the popup and set its coordinates
+            // based on the feature found.
+            popup.setLngLat(coordinates).setHTML(description).addTo(map);
+        });
+        
+        map.on('mouseleave', 'places', () => {
+            map.getCanvas().style.cursor = '';
+            popup.remove();
+        });
+        
+    });
+    
+</script>
+{{ end }}
