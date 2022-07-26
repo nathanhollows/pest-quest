@@ -7,39 +7,79 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cardo&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="{{ url "public/css/style.css" stylesheetversion }}">
     <title>{{ if .title }}{{ .title }} | {{ end }}{{ .siteTitle }}</title>
 </head>
 
 <body>
+    <div class="sidebar">
+        <div class="blocker"></div>
+        <aside class="content">
+            <div id="sidebar-close">
+                {{ svg "x-lg" true}}
+            </div>
+            <h1>Menu</h1>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="{{ url "" }}" class="{{ active .section "index"}}">
+                            Missions
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url "map" }}" class="{{ active .section "map"}}">
+                            Map
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url "blog" }}" class="{{ active .section "blog"}}">
+                            Blog
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url "leaderboard" }}" class="{{ active .section "leaderboard"}}">
+                            Leaderboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url "about" }}" class="{{ active .section "about"}}">
+                            About
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url "login" }}" role="button" class="{{ active .section "session"}}">
+                            Login or Sign up
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+    </div>
     <div id="header">
         <nav class="container">
             <ul>
                 <li>
-                    <a href="{{ url }}">
-                        Pest Quest
+                    <a id="sidebar-toggle">
+                        {{ svg "list" true }}
                     </a>
                 </li>
             </ul>
             <ul>
                 <li>
-                    <a href="{{ url "blog" }}" class="{{ active .section "blog"}}">
-                        Blog
+                    <a href="{{ url }}">
+                        <h1>
+                            The Branch
+                        </h1>
                     </a>
                 </li>
+            </ul>
+            <ul>
                 <li>
-                    <a href="{{ url "leaderboard" }}" class="{{ active .section "leaderboard"}}">
-                        Leaderboard
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url "about" }}" class="{{ active .section "about"}}">
-                        About
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url "login" }}" role="button" class="{{ active .section "session"}}">
-                        Login/Sign up
+                    <a id="account" href="{{ url "login"}}">
+                        {{ svg "person-circle" true }}
                     </a>
                 </li>
             </ul>
@@ -53,11 +93,33 @@
             <li><a href="{{ url "privacy" }}">Privacy</a></li>
         </ul>
         <ul>
-            <li id="copyright"><small>©{{ currentYear }} Sage Barsony</small></li>
+            <li id="copyright"><small>©{{ currentYear }} The Order of The Branch</small></li>
         </ul>
     </nav>
 </footer>
 <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+<script>
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.querySelector('.blocker').onclick = hideSidebar;
+    function showSidebar() { // swipe right
+        sidebar.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+    }
+    function hideSidebar() { // by blocker click, swipe left, or url change
+        sidebar.classList.remove('visible');
+        document.body.style.overflow = '';
+    }
+    function toggleSidebar() {
+        sidebar.classList.contains('visible') ? hideSidebar() : showSidebar();
+    }
+    document.getElementById("sidebar-toggle").addEventListener("click", function(event) {
+        event.preventDefault();
+        toggleSidebar();
+    });
+    document.getElementById("sidebar-close").addEventListener("click", function(event) {
+        hideSidebar();
+    });
+</script>
 </body>
 </html>
 {{ end }}
