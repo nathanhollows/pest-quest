@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// Markers allows markers to be added or removed from the map.
+// BlogIndex shows all the blog posts
 func BlogIndex(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
 	data := make(map[string]interface{})
 	data["messages"] = flash.Get(w, r)
@@ -76,7 +76,7 @@ func BlogEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
 	return handlers.RenderAdmin(w, data, "admin/blog/edit.html")
 }
 
-// MarkersUpdate saves the new values of a marker
+// BlogUpdate saves the new values of a blog
 func BlogUpdate(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
 	// If the form has been submitted
 	if r.Method == http.MethodPost {
@@ -104,11 +104,11 @@ func BlogUpdate(env *handlers.Env, w http.ResponseWriter, r *http.Request) error
 	return handlers.Error404(env, w, r)
 }
 
-// MarkersDelete removes a marker from the map.
+// BlogDelete deletes a blog.
 func BlogDelete(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
 	data := make(map[string]interface{})
 	data["messages"] = flash.Get(w, r)
-	data["section"] = "markers"
+	data["section"] = "blog"
 
 	return handlers.RenderAdmin(w, data, "admin/markers/index.html")
 }
