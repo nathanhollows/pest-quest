@@ -14,4 +14,4 @@ database:
 frontend:
   admin: "admin"
   pass: "1234567890"
-  site_name: "Pest Quest"
+  site_name: "The Branch · Dunedin"
