@@ -1,0 +1,36 @@
+{{ define "body" }}
+<main class="container">
+    <section id="actions">
+        <h1>Sage Advice</h1>
+        <a href="{{ url "admin/advice/create" }}" role="button">Create</a>
+    </section>
+    {{ template "flash" . }}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Mission</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .advice}}
+            <tr>
+                <td>
+                    {{ .Mission.Name }}
+                </td>
+                <td>
+                    <a href="{{ url "advice/"}}">View</a>
+                    <a href="{{ url (print "admin/advice/edit/" .ID)}}">Edit</a>
+                </td>
+            </tr>
+            {{ end }}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th scope="col">Mission</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </tfoot>
+    </table>
+</main>
+{{ end }}

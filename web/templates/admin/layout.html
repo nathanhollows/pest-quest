@@ -24,7 +24,22 @@
             <ul>
                 {{ $section := "" }}{{ if .section }}{{ $section = .section }}{{ end }}
                 <li>
-                    <a href="{{ url "admin/blog" }}" class="{{ active .section "blog"}}">
+                    <a href="{{ url "admin/quests" }}" class="{{ active .section "quests"}}">
+                        Quests
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url "admin/advice" }}" class="{{ active .section "advice"}}">
+                        Sage Advice
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url "admin/challenges" }}" class="{{ active .section "challenges"}}">
+                        Challenges
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url "admin/blog" }}" class="{{ active .section "chunks"}}">
                         Blog
                     </a>
                 </li>

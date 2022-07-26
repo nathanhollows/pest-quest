@@ -48,6 +48,7 @@ func main() {
 		// 	&models.Admin{},
 		// 	&models.ScanEvent{},
 		// 	&models.Gallery{},
+		&domain.Advice{},
 		&domain.User{},
 		&domain.Trail{},
 		&domain.Page{},
@@ -62,6 +63,7 @@ func main() {
 // Set up the routes needed for the game.
 func routes() {
 	router.Handle("/", handlers.HandlePublic{Env: &env, H: handlers.Index})
+	router.Handle("/map", handlers.HandlePublic{Env: &env, H: handlers.Map})
 	router.Handle("/blog", handlers.HandlePublic{Env: &env, H: handlers.Blog})
 	router.Handle("/blog/{title}", handlers.HandlePublic{Env: &env, H: handlers.BlogPost})
 	router.Handle("/about", handlers.HandlePublic{Env: &env, H: handlers.About})
@@ -80,6 +82,11 @@ func routes() {
 	router.Handle("/admin/blog/create", handlers.HandleAdmin{Env: &env, H: admin.BlogCreate})
 	router.Handle("/admin/blog/edit/{url}", handlers.HandleAdmin{Env: &env, H: admin.BlogEdit})
 	router.Handle("/admin/blog/delete", handlers.HandleAdmin{Env: &env, H: admin.BlogDelete})
+
+	router.Handle("/admin/advice", handlers.HandleAdmin{Env: &env, H: admin.AdviceIndex})
+	router.Handle("/admin/advice/create", handlers.HandleAdmin{Env: &env, H: admin.AdviceCreate})
+	router.Handle("/admin/advice/edit/{id}", handlers.HandleAdmin{Env: &env, H: admin.AdviceEdit})
+	router.Handle("/admin/advice/delete", handlers.HandleAdmin{Env: &env, H: admin.AdviceDelete})
 
 	router.Handle("/admin/md/preview", handlers.HandleAdmin{Env: &env, H: admin.PreviewMD})
 
