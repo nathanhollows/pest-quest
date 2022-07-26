@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/nathanhollows/pest-quest/internal/helpers"
+	"gitlab.com/golang-commonmark/markdown"
 	"gorm.io/gorm"
 )
 
@@ -57,4 +58,13 @@ func (blog *Blog) Parse(values url.Values, db *gorm.DB) error {
 		blog.Published = true
 	}
 	return nil
+}
+
+func (blog Blog) MD() template.HTML {
+	md := markdown.New(
+		markdown.XHTMLOutput(true),
+		markdown.HTML(true),
+		markdown.Breaks(true))
+
+	return template.HTML(md.RenderToString([]byte(blog.Content)))
 }

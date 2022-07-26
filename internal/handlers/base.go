@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -14,6 +15,7 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/nathanhollows/pest-quest/internal/config"
 	"github.com/nathanhollows/pest-quest/internal/helpers"
+	"gitlab.com/golang-commonmark/markdown"
 	"gorm.io/gorm"
 )
 
@@ -186,6 +188,19 @@ func parse(patterns ...string) *template.Template {
 	}
 	patterns = append(patterns, "web/templates/public/layout.html", "web/templates/partials/flash.html")
 	return template.Must(template.New("base").Funcs(funcs).ParseFiles(patterns...))
+}
+
+func parseMD(page string, db *gorm.DB) template.HTML {
+	md := markdown.New(
+		markdown.XHTMLOutput(true),
+		markdown.HTML(true),
+		markdown.Breaks(true))
+
+	page = regexp.MustCompile("==(.*)==").ReplaceAllString(page, "<mark>$1</mark>")
+	page = regexp.MustCompile(":::([^:::]*):::").ReplaceAllString(page, `<article>
+$1</article>`)
+
+	return template.HTML(md.RenderToString([]byte(page)))
 }
 
 // TODO: Abstract this out so it is automatic

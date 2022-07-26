@@ -5,7 +5,7 @@
     {{ range .posts }}
     <article>
         <h1>{{ .Title }}</h1>
-        <p>{{ .Content }}</p>
+        <p>{{ .MD }}</p>
         <footer>
             <a href="{{ .GetURL }}">Read More</a>
         </footer>
