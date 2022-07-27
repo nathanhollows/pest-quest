@@ -55,6 +55,15 @@
                         </a>
                     </li>
                 </ul>
+                
+            </nav>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="privacy">Privacy</a>
+                    </li>
+                    <li id="copyright"><small>©{{ currentYear }} The Order of The Branch</small></li>
+                </ul>
             </nav>
         </aside>
     </div>
@@ -87,16 +96,6 @@
     </div>
 </div>
 {{ template "body" .}}
-<footer id="footer">
-    <nav class="container">
-        <ul>
-            <li><a href="{{ url "privacy" }}">Privacy</a></li>
-        </ul>
-        <ul>
-            <li id="copyright"><small>©{{ currentYear }} The Order of The Branch</small></li>
-        </ul>
-    </nav>
-</footer>
 <script src="https://unpkg.com/htmx.org@1.7.0"></script>
 <script>
     const sidebar = document.querySelector('.sidebar');

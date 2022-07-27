@@ -1,26 +1,127 @@
 {{ define "body" }}
 <div class="container">
-    <div class="grid">
+    <p>Welcome, Agent {{ .agent }}</p>
+    <div class="grid quests">
+        <article>
+            <header>
+                <strong>Induction</strong>
+                <span style="float: right;">
+                    <span class="difficulty" data-tooltip="Easy difficulty">
+                        {{ svg "star-fill" true}}
+                        {{ svg "star" true}}
+                        {{ svg "star" true}}
+                    </span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="players" data-tooltip="Individual">
+                        {{ svg "person-fill" true}}
+                    </span>
+                </span>
+            </header>
+            <p>
+                Welcome to The Order of The Branch! Before you can officially take on any Branch Missions you must first complete your training.
+            </p>
+            <footer>
+                <button>Accept this mission</button>
+            </footer>
+        </article>
         
         <article>
-            <strong>Induction</strong>
-            <a href="{{ url ""}}" role="button">Accept this mission</a>
+            <header>
+                <strong>Oh, the places you'll grow!</strong>
+                <span style="float: right;">
+                    <span class="difficulty" data-tooltip="Easy difficulty">
+                        {{ svg "star-fill" true}}
+                        {{ svg "star" true}}
+                        {{ svg "star" true}}
+                    </span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="players" data-tooltip="Can be completed individually">
+                        {{ svg "person-fill" true}}
+                    </span>
+                </span>
+            </header>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum at quibusdam corporis consequuntur fugit, quae quis nemo facilis quo quam accusantium, in laborum.
+            </p>
+            <footer>
+                <button href="{{ url ""}}" disabled class="secondary">This mission is locked</button>
+            </footer>
         </article>
-
+        
         <article>
-            Oh, the places you'll grow!
+            <header>
+                <strong>Cactus makes perfect</strong>
+                <span style="float: right;">
+                    {{ svg "star-fill" true}}
+                    {{ svg "star-fill" true}}
+                    {{ svg "star" true}}
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    {{ svg "person-fill" true}}
+                </span>
+            </header>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum at quibusdam corporis consequuntur fugit, quae quis nemo facilis quo quam accusantium, in laborum.
+            </p>
+            <footer>
+                <a href="{{ url ""}}" role="button">Accept this mission</a>
+            </footer>
         </article>
+        
         <article>
-            Cactus makes perfect
+            <header>
+                <strong>Questions are Answer Phone</strong>
+                <span style="float: right;">
+                    {{ svg "star-fill" true}}
+                    {{ svg "star-fill" true}}
+                    {{ svg "star-fill" true}}
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    {{ svg "people-fill" true}}
+                </span>
+            </header>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum at quibusdam corporis consequuntur fugit, quae quis nemo facilis quo quam accusantium, in laborum.
+            </p>
+            <footer>
+                <a href="{{ url ""}}" role="button">Accept this mission</a>
+            </footer>
         </article>
+        
         <article>
-            Questions and answer phones
+            <header>
+                <strong>Salads and Cipher</strong>
+                <span style="float: right;">
+                    {{ svg "star-fill" true}}
+                    {{ svg "star" true}}
+                    {{ svg "star" true}}
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    {{ svg "person-fill" true}}
+                </span>
+            </header>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum at quibusdam corporis consequuntur fugit, quae quis nemo facilis quo quam accusantium, in laborum.
+            </p>
+            <footer>
+                <a href="{{ url ""}}" role="button">Accept this mission</a>
+            </footer>
         </article>
+        
         <article>
-            Salads and Ciphers
-        </article>
-        <article>
-            Toucan play at that game
+            <header>
+                <strong>Toucan play at that game</strong>
+                <span style="float: right;">
+                    {{ svg "star-fill" true}}
+                    {{ svg "star" true}}
+                    {{ svg "star" true}}
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    {{ svg "people-fill" true}}
+                </span>
+            </header>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum at quibusdam corporis consequuntur fugit, quae quis nemo facilis quo quam accusantium, in laborum.
+            </p>
+            <footer>
+                <a href="{{ url ""}}" role="button">Accept this mission</a>
+            </footer>
         </article>
     </div>
 </div>

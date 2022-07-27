@@ -1,5 +1,10 @@
 :root {
+    --primary: #F2542D !important;
     --sidebar-background: #F2542D;
+}
+
+body {
+    overflow-x: hidden;
 }
 
 nav a.active {
@@ -39,12 +44,15 @@ h1, h2, h3, h4, h5, h6{
 }
 /* user content */
 .sidebar .content {
+    display: flex;
+    flex-direction: column;
     position: absolute;
+    overflow-x: scroll;
     top: 0;
     left: 0;
     background: var(--sidebar-background);
     height: 100%;
-    width: 250px;
+    width: 15em;
     left: -50%;   /* will be animated to left: 0, by animation */
     animation: slide 0.5s forwards;
     padding: var(--spacing);
@@ -90,6 +98,10 @@ h1, h2, h3, h4, h5, h6{
     width: 100%;
 }
 
+.sidebar nav:last-of-type {
+    margin-top: auto;
+}
+
 /** SVG */
 
 .bi {
@@ -102,9 +114,51 @@ h1, h2, h3, h4, h5, h6{
     margin-bottom: 0;
     font-size: 1.25rem;
     text-transform: uppercase;
+    line-height: 0;
 }
 
 #header a svg {
     fill: var(--sidebar-background);
     height: 1.5em;
+}
+
+/** Mission list **/
+
+@media (min-width: 992px) {
+    .grid.quests {
+        grid-template-columns: repeat(auto-fit,minmax(0%,1fr));
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 1fr;
+        grid-column-gap: var(--block-spacing-horizontal);
+        grid-row-gap: var(--block-spacing-vertical);
+    }
+}
+.grid.quests {
+    grid-template-columns: repeat(auto-fit,minmax(0%,1fr));
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-auto-rows: 1fr;
+    grid-column-gap: var(--block-spacing-horizontal);
+    grid-row-gap: var(--block-spacing-vertical);
+}
+.grid.quests article {
+    margin: 0;
+}
+.grid.quests {
+    margin-top: var(--block-spacing-vertical);
+}
+
+.grid.quests article {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid.quests article footer {
+    margin-top: auto;
+}
+
+.grid.quests footer button {
+    margin: 0;
+}
 }
