@@ -57,6 +57,7 @@ func main() {
 		&domain.Blog{},
 		&domain.Location{},
 		&domain.MarkerType{},
+		&domain.User{},
 	)
 	routes()
 	fmt.Printf("%s%s%s", "http://", GetOutboundIP(), ":8803")
@@ -85,6 +86,7 @@ func routes() {
 	router.Handle("/about", handlers.HandlePublic{Env: &env, H: handlers.About})
 	router.Handle("/leaderboard", handlers.HandlePublic{Env: &env, H: handlers.Leaderboard})
 	router.Handle("/privacy-and-terms", handlers.HandlePublic{Env: &env, H: handlers.Privacy})
+	router.Handle("/name/suggest", handlers.HandlePublic{Env: &env, H: handlers.SuggestName})
 
 	router.Handle("/admin/markers", handlers.HandleAdmin{Env: &env, H: admin.MarkersIndex})
 	router.Handle("/admin/markers/add", handlers.HandleAdmin{Env: &env, H: admin.MarkersCreate})
@@ -108,6 +110,7 @@ func routes() {
 
 	router.Handle("/login", handlers.HandlePublic{Env: &env, H: handlers.Login})
 	router.Handle("/logout", handlers.HandlePublic{Env: &env, H: handlers.Logout})
+	router.Handle("/register", handlers.HandlePublic{Env: &env, H: handlers.Register})
 
 	router.Handle("/404", handlers.HandlePublic{Env: &env, H: handlers.Error404})
 	router.NotFound(handlers.NotFound)

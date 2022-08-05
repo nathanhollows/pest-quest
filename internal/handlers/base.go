@@ -14,6 +14,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/sessions"
 	"github.com/nathanhollows/pest-quest/internal/config"
+	"github.com/nathanhollows/pest-quest/internal/core/session"
+	"github.com/nathanhollows/pest-quest/internal/flash"
 	"github.com/nathanhollows/pest-quest/internal/helpers"
 	"gitlab.com/golang-commonmark/markdown"
 	"gorm.io/gorm"
@@ -80,17 +82,16 @@ func (h HandlePublic) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h HandleAdmin) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	session, err := h.Env.Session.Get(r, "admin")
-	if err != nil || session.Values["id"] == nil {
-		http.Redirect(w, r, helpers.URL("login"), http.StatusFound)
+	user := session.GetUser(r)
+	if !user.Admin {
+		flash.Set(w, r, flash.Message{Message: "You don't have access to that"})
+		http.Redirect(w, r, helpers.URL("denied"), http.StatusFound)
 	}
 
-	err = h.H(h.Env, w, r)
+	err := h.H(h.Env, w, r)
 	if err != nil {
 		switch e := err.(type) {
 		case Error:
-			// We can retrieve the status here and write out a specific
-			// HTTP status code.
 			log.Printf("HTTP %d - %s", e.Status(), e)
 			http.Error(w, e.Error(), e.Status())
 		default:

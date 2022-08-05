@@ -22,6 +22,12 @@
                 {{ svg "x-lg" true}}
             </div>
             <h1>Menu</h1>
+            {{ if .session }}
+            <p>Welcome {{ .session.DisplayName }}</p>
+            <p>You are on <strong><a href="{{ url "missions" }}">one active mission</a></strong></p>
+            <p>You have <strong><a href="{{ url "messages" }}">no new messages</a></strong></p>
+            {{ end }}
+
             <nav>
                 <ul>
                     <li>
@@ -41,24 +47,32 @@
                     </li>
                     <li>
                         <a href="{{ url "leaderboard" }}" class="{{ active .section "leaderboard"}}">
-                            Leaderboard
+                            Community
                         </a>
                     </li>
+                    {{ if .session.ID }}
                     <li>
-                        <a href="{{ url "about" }}" class="{{ active .section "about"}}">
-                            About
+                        <a href="{{ url "logout" }}" role="button" class="{{ active .section "session"}}">
+                            Logout
                         </a>
                     </li>
+                    {{ else }}
                     <li>
                         <a href="{{ url "login" }}" role="button" class="{{ active .section "session"}}">
                             Login or Sign up
                         </a>
                     </li>
+                    {{ end }}
                 </ul>
                 
             </nav>
             <nav>
                 <ul>
+                    <li>
+                        <a href="{{ url "about" }}" class="{{ active .section "about"}}">
+                            About
+                        </a>
+                    </li>
                     <li>
                         <a href="privacy">Privacy</a>
                     </li>
@@ -79,7 +93,8 @@
             <ul>
                 <li>
                     <a href="{{ url }}">
-                        <h1>
+                        <img style="height: auto;width: 3.8em;display: inline-block;padding: 0;margin: -2em 0;" src="/public/img/logo/logo-small.svg">
+                        <h1 style="display: inline-block;">
                             The Branch
                         </h1>
                     </a>
@@ -97,6 +112,7 @@
 </div>
 {{ template "body" .}}
 <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+<script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
 <script>
     const sidebar = document.querySelector('.sidebar');
     sidebar.querySelector('.blocker').onclick = hideSidebar;

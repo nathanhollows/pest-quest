@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/nathanhollows/pest-quest/internal/core/agentname"
-	"github.com/nathanhollows/pest-quest/internal/core/markers"
+	"github.com/nathanhollows/pest-quest/internal/core/session"
 	"github.com/nathanhollows/pest-quest/internal/flash"
 )
 
@@ -13,6 +13,7 @@ import (
 func Index(env *Env, w http.ResponseWriter, r *http.Request) error {
 	data := make(map[string]interface{})
 	data["messages"] = flash.Get(w, r)
+	data["session"] = session.GetUser(r)
 	data["section"] = "index"
 
 	data["agent"] = agentname.Generate()

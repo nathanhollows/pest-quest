@@ -27,20 +27,21 @@ func getCookieStore() *sessions.CookieStore {
 // Set adds a new message into the cookie storage.
 func Set(w http.ResponseWriter, r *http.Request, message Message) {
 	store := getCookieStore()
-	session, _ := store.Get(r, "om")
+	session, _ := store.Get(r, "flash")
 	session.Options.HttpOnly = true
-	session.Options.Secure = true
 	session.Options.SameSite = http.SameSiteStrictMode
+	// session.Options.Secure = true
 	session.AddFlash(message)
 	session.Save(r, w)
 }
 
 // Get flash messages from the cookie storage.
 func Get(w http.ResponseWriter, r *http.Request) []interface{} {
-	session, err := getCookieStore().Get(r, "om")
+	session, err := getCookieStore().Get(r, "flash")
 	if err == nil {
 		messages := session.Flashes()
 		if len(messages) > 0 {
+			session.Options.MaxAge = -1
 			session.Save(r, w)
 		}
 		return messages

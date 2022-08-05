@@ -1,17 +1,28 @@
 {{ define "body" }}
 <main class="container">
   {{ template "flash" . }}
+  {{ .id }}
   <article class="grid">
     <div>
       <hgroup>
         <h1>Sign In</h1>
-        <h2>Save your progress</h2>
+        <h2>Welcome back, agent</h2>
       </hgroup>
       <form method="post">
-        <input type="text" name="username" placeholder="Username" aria-label="Username" required>
-        <input type="password" name="password" placeholder="Password" aria-label="Password" required>
-        <button type="submit" class="contrast">Submit</button>
+        <fieldset>
+          <label for="email">Email address
+            <input type="email" id="email" name="email" placeholder="Email address" value="me@nathanhollows.com" required>
+          </label>
+          <label for="password">Password
+            <input type="password" name="password" placeholder="Password" aria-label="Password" value="c3CbpAWswBS6BHh" required>
+          </label>
+        </fieldset>
+        <button type="submit" class="contrast">Sign In</button>
+        <a href="{{ url "register" }}">Register</a> instead
       </form>
+    </div>
+    <div>
+      <img src="/public/img/logo/logo-no-text.png">
     </div>
   </article>
 </main><!-- ./ Main -->

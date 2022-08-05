@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/nathanhollows/pest-quest/internal/core/agentname"
+	"github.com/nathanhollows/pest-quest/internal/core/session"
 	"github.com/nathanhollows/pest-quest/internal/domain"
 	"github.com/nathanhollows/pest-quest/internal/flash"
 	"github.com/nathanhollows/pest-quest/internal/helpers"
-	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 // Login handles user logins
@@ -18,29 +18,19 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
 	data := make(map[string]interface{})
 	data["section"] = "session"
 
-	r.ParseForm()
-
 	if r.Method == http.MethodPost {
-		username := r.Form.Get("username")
+		email := r.FormValue("email")
+		pass := r.FormValue("password")
 
-		var user domain.Admin
-		env.DB.Model(&user).Where("username = ?", username).Find(&user)
+		user := domain.User{}
+		user.FindByEmail(&env.DB, email)
 
-		if checkHashPassword(user.Password, r.Form.Get("password")) {
-			session, err := env.Session.Get(r, "admin")
-			if err != nil || session.Values["id"] == nil {
-				session, _ = env.Session.New(r, "admin")
-				session.Options.HttpOnly = true
-				session.Options.SameSite = http.SameSiteStrictMode
-				session.Options.Secure = true
-				id := uuid.New()
-				session.Values["id"] = id.String()
-				session.Save(r, w)
-				http.Redirect(w, r, helpers.URL("admin"), http.StatusFound)
-				return nil
-			}
+		if user.ID > 0 && session.CheckHashPassword(user.Password, pass) {
+			session.SetSession(user, w)
+			flash.Set(w, r, flash.Message{Message: "Welcome back, " + user.DisplayName})
+			http.Redirect(w, r, helpers.URL(), http.StatusFound)
 		} else {
-			flash.Set(w, r, flash.Message{Message: "Incorrect username or password"})
+			flash.Set(w, r, flash.Message{Message: "Please double check your email and password"})
 		}
 	}
 
@@ -52,39 +42,56 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
 func Logout(env *Env, w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "text/html")
 
-	session, err := env.Session.Get(r, "admin")
-	if err == nil {
-		if session.Values["id"] != nil {
-			session.Options.MaxAge = -1
-			session.Save(r, w)
-			flash.Set(w, r, flash.Message{Message: "You have been logged out"})
-		}
-	}
+	session.ClearSession(w)
+	flash.Set(w, r, flash.Message{Message: "You have been logged out"})
 	http.Redirect(w, r, fmt.Sprint(helpers.URL("login")), http.StatusFound)
 	return nil
 }
 
-func hashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
+// Register creates a new user
+func Register(env *Env, w http.ResponseWriter, r *http.Request) error {
+	w.Header().Set("Content-Type", "text/html")
+	data := make(map[string]interface{})
+	data["section"] = "session"
+	data["username"] = agentname.Generate()
+
+	r.ParseForm()
+
+	if r.Method == http.MethodPost && r.Form.Get("terms") != "" {
+		user := domain.User{}
+		user.DisplayName = r.Form.Get("agent")
+		user.Email = r.Form.Get("email")
+		user.Password = r.Form.Get("password") // This gets hashed before saving!
+
+		var err = session.CreateUser(&user, &env.DB)
+		if err == nil {
+			session, err := env.Session.Get(r, "user")
+			if err != nil || session.Values["id"] == nil {
+				session, _ = env.Session.New(r, "user")
+				session.Options.HttpOnly = true
+				session.Options.SameSite = http.SameSiteStrictMode
+				// session.Options.Secure = true
+				id := uuid.New()
+				session.Values["id"] = id.String()
+				session.Save(r, w)
+				http.Redirect(w, r, helpers.URL(""), http.StatusFound)
+				flash.Set(w, r, flash.Message{Message: fmt.Sprint("Welcome Agent ", user.DisplayName)})
+				return nil
+			}
+		} else {
+			flash.Set(w, r, flash.Message{Message: err.Error()})
+		}
+	} else if r.Method == http.MethodPost && r.Form.Get("terms") == "" {
+		flash.Set(w, r, flash.Message{Message: "Please accept the terms and conditions."})
+	}
+
+	data["messages"] = flash.Get(w, r)
+	return render(w, data, "session/register.html")
 }
 
-func checkHashPassword(hash string, password string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
-}
-
-func createUser(username string, password string, db *gorm.DB) error {
-	user := domain.Admin{}
-	user.Username = username
-	pw, err := hashPassword(password)
-	if err != nil {
-		return err
-	}
-	user.Password = pw
-	result := db.Model(&domain.Admin{}).Create(&user)
-	if result.Error != nil {
-		return result.Error
-	}
-	return nil
+// Suggestname suggests a new name
+func SuggestName(env *Env, w http.ResponseWriter, r *http.Request) error {
+	data := make(map[string]interface{})
+	data["name"] = agentname.Generate()
+	return renderBlank(w, data, "session/name.html")
 }
