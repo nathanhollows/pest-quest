@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"net/http"
+
+	"github.com/nathanhollows/pest-quest/internal/flash"
 )
 
 // NotFound is the 404 handlers.
@@ -18,4 +20,13 @@ func Error404(env *Env, w http.ResponseWriter, r *http.Request) error {
 	data["title"] = "Error 404"
 	data["section"] = "error"
 	return render(w, data, "errors/404.html")
+}
+
+// AccessDenied is the page visitors see when they try to access they shouldn't
+func AccessDenied(env *Env, w http.ResponseWriter, r *http.Request) error {
+	data := make(map[string]interface{})
+	data["title"] = "Access Denied"
+	data["section"] = "error"
+	data["messages"] = flash.Get(w, r)
+	return render(w, data, "errors/accessdenied.html")
 }

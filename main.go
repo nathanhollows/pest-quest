@@ -112,6 +112,7 @@ func routes() {
 	router.Handle("/logout", handlers.HandlePublic{Env: &env, H: handlers.Logout})
 	router.Handle("/register", handlers.HandlePublic{Env: &env, H: handlers.Register})
 
+	router.Handle("/denied", handlers.HandlePublic{Env: &env, H: handlers.AccessDenied})
 	router.Handle("/404", handlers.HandlePublic{Env: &env, H: handlers.Error404})
 	router.NotFound(handlers.NotFound)
 
