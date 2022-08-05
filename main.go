@@ -57,6 +57,7 @@ func main() {
 		&domain.Blog{},
 		&domain.Location{},
 		&domain.MarkerType{},
+		&domain.Mission{},
 		&domain.User{},
 	)
 	routes()
@@ -105,6 +106,8 @@ func routes() {
 	router.Handle("/admin/advice/create", handlers.HandleAdmin{Env: &env, H: admin.AdviceCreate})
 	router.Handle("/admin/advice/edit/{id}", handlers.HandleAdmin{Env: &env, H: admin.AdviceEdit})
 	router.Handle("/admin/advice/delete", handlers.HandleAdmin{Env: &env, H: admin.AdviceDelete})
+
+	router.Handle("/admin/missions", handlers.HandleAdmin{Env: &env, H: admin.MissionsIndex})
 
 	router.Handle("/admin/md/preview", handlers.HandleAdmin{Env: &env, H: admin.PreviewMD})
 

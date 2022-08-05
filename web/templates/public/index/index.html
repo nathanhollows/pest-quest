@@ -1,128 +1,57 @@
 {{ define "body" }}
-<div class="container">
-    <p>Welcome, Agent {{ .agent }}</p>
+<main class="container">
+    {{ template "flash" . }}
     <div class="grid quests">
+        {{ range .missions }}
         <article>
             <header>
-                <strong>Induction</strong>
+                <strong>{{ .Name }}</strong>
                 <span style="float: right;">
-                    <span class="difficulty" data-tooltip="Easy difficulty">
-                        {{ svg "star-fill" true}}
-                        {{ svg "star" true}}
-                        {{ svg "star" true}}
-                    </span>
+                    {{ template "stars" . }}
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <span class="players" data-tooltip="Individual">
-                        {{ svg "person-fill" true}}
-                    </span>
+                    {{ template "players" . }}
                 </span>
             </header>
             <p>
-                Welcome to The Order of The Branch! Before you can officially take on any Branch Missions you must first complete your training.
+                {{ .Description }}
             </p>
             <footer>
                 <button>Accept this mission</button>
             </footer>
         </article>
-        
-        <article>
-            <header>
-                <strong>Oh, the places you'll grow!</strong>
-                <span style="float: right;">
-                    <span class="difficulty" data-tooltip="Easy difficulty">
-                        {{ svg "star-fill" true}}
-                        {{ svg "star" true}}
-                        {{ svg "star" true}}
-                    </span>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <span class="players" data-tooltip="Can be completed individually">
-                        {{ svg "person-fill" true}}
-                    </span>
-                </span>
-            </header>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum at quibusdam corporis consequuntur fugit, quae quis nemo facilis quo quam accusantium, in laborum.
-            </p>
-            <footer>
-                <button href="{{ url ""}}" disabled class="secondary">This mission is locked</button>
-            </footer>
-        </article>
-        
-        <article>
-            <header>
-                <strong>Cactus makes perfect</strong>
-                <span style="float: right;">
-                    {{ svg "star-fill" true}}
-                    {{ svg "star-fill" true}}
-                    {{ svg "star" true}}
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    {{ svg "person-fill" true}}
-                </span>
-            </header>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum at quibusdam corporis consequuntur fugit, quae quis nemo facilis quo quam accusantium, in laborum.
-            </p>
-            <footer>
-                <a href="{{ url ""}}" role="button">Accept this mission</a>
-            </footer>
-        </article>
-        
-        <article>
-            <header>
-                <strong>Questions are Answer Phone</strong>
-                <span style="float: right;">
-                    {{ svg "star-fill" true}}
-                    {{ svg "star-fill" true}}
-                    {{ svg "star-fill" true}}
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    {{ svg "people-fill" true}}
-                </span>
-            </header>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum at quibusdam corporis consequuntur fugit, quae quis nemo facilis quo quam accusantium, in laborum.
-            </p>
-            <footer>
-                <a href="{{ url ""}}" role="button">Accept this mission</a>
-            </footer>
-        </article>
-        
-        <article>
-            <header>
-                <strong>Salads and Cipher</strong>
-                <span style="float: right;">
-                    {{ svg "star-fill" true}}
-                    {{ svg "star" true}}
-                    {{ svg "star" true}}
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    {{ svg "person-fill" true}}
-                </span>
-            </header>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum at quibusdam corporis consequuntur fugit, quae quis nemo facilis quo quam accusantium, in laborum.
-            </p>
-            <footer>
-                <a href="{{ url ""}}" role="button">Accept this mission</a>
-            </footer>
-        </article>
-        
-        <article>
-            <header>
-                <strong>Toucan play at that game</strong>
-                <span style="float: right;">
-                    {{ svg "star-fill" true}}
-                    {{ svg "star" true}}
-                    {{ svg "star" true}}
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    {{ svg "people-fill" true}}
-                </span>
-            </header>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum at quibusdam corporis consequuntur fugit, quae quis nemo facilis quo quam accusantium, in laborum.
-            </p>
-            <footer>
-                <a href="{{ url ""}}" role="button">Accept this mission</a>
-            </footer>
-        </article>
+        {{ end }}
     </div>
-</div>
+</main>
+{{ end }}
+
+{{ define "stars" }}
+<span class="difficulty" data-tooltip="Easy difficulty">
+    {{ if (ge .Difficulty 1)}}
+        {{ svg "star-fill" true}}
+    {{ else }}
+        {{ svg "star" true}}
+    {{ end }}
+    {{ if (ge .Difficulty 2)}}
+        {{ svg "star-fill" true}}
+    {{ else }}
+        {{ svg "star" true}}
+    {{ end }}
+    {{ if (ge .Difficulty 3)}}
+        {{ svg "star-fill" true}}
+    {{ else }}
+        {{ svg "star" true}}
+    {{ end }}
+</span>
+{{ end }}
+
+{{ define "players" }}
+        {{ if (eq .Players 1)}}
+        <span class="players" data-tooltip="Individual">
+            {{ svg "person-fill" true}}
+        </span>
+        {{ else }}
+        <span class="players" data-tooltip="Group">
+            {{ svg "people-fill" true}}
+        </span>
+        {{ end }}
 {{ end }}

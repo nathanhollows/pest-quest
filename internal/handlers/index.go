@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/nathanhollows/pest-quest/internal/core/agentname"
+	"github.com/nathanhollows/pest-quest/internal/core/missions"
 	"github.com/nathanhollows/pest-quest/internal/core/session"
 	"github.com/nathanhollows/pest-quest/internal/flash"
 )
@@ -17,7 +18,7 @@ func Index(env *Env, w http.ResponseWriter, r *http.Request) error {
 	data["section"] = "index"
 
 	data["agent"] = agentname.Generate()
-	data["markers"] = markers.GetPublished(env.DB)
+	data["missions"] = missions.Get(&env.DB)
 
 	return render(w, data, "index/index.html")
 }

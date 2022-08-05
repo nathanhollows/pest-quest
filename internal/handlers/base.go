@@ -239,3 +239,20 @@ func startSession(s sessions.Store, r *http.Request, w http.ResponseWriter) (*se
 	}
 	return session, err
 }
+
+func renderBlank(w http.ResponseWriter, data map[string]interface{}, patterns ...string) error {
+	w.Header().Set("Content-Type", "text/html")
+	err := parseBlank(patterns...).ExecuteTemplate(w, "body", data)
+	if err != nil {
+		http.Error(w, err.Error(), 0)
+		log.Print("Template executing error: ", err)
+	}
+	return err
+}
+
+func parseBlank(patterns ...string) *template.Template {
+	for i := 0; i < len(patterns); i++ {
+		patterns[i] = "web/templates/public/" + patterns[i]
+	}
+	return template.Must(template.New("body").Funcs(funcs).ParseFiles(patterns...))
+}

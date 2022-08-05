@@ -1,0 +1,9 @@
+{{ define "flash" }}
+<span class="difficulty" data-tooltip="Easy difficulty">
+  {{ if eq .Difficulty 1}}
+  {{ svg "star-fill" true}}
+  {{ end }}
+  {{ svg "star" true}}
+  {{ svg "star" true}}
+</span>
+{{ end }}

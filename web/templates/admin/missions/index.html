@@ -1,0 +1,75 @@
+{{ define "body" }}
+<main class="container">
+    {{ template "flash" . }}
+    <h1>Missions</h1>
+    <p>
+        <a href="{{ url "/admin/missions/add" }}" role="button">Create a Mission</a>
+    </p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th scope="col" style="text-align: center;" data-tooltip="Published">{{ svg "eye" true}}</th>
+                <th scope="col">Name</th>
+                <th scope="col" style="text-align: center;">Difficulty</th>
+                <th scope="col" style="text-align: center;">Players</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .missions }}
+            <tr>
+                <td style="text-align: center;">{{if .Published }}✔{{end}}</td>
+                <td>
+                    <a href="{{ url (print "/admin/missions/edit/" .ID) }}">
+                        {{ .Name }}
+                    </a>
+                </td>
+                <td style="text-align: center;">{{ template "stars" . }}</td>
+                <td style="text-align: center;">{{ template "players" . }}</td>
+            </tr>
+            {{ end }}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th scope="col" style="text-align: center;" data-tooltip="Published">{{ svg "eye" true}}</th>
+                <th scope="col">Name</th>
+                <th scope="col" style="text-align: center;">Difficulty</th>
+                <th scope="col" style="text-align: center;">Players</th>
+            </tr>
+        </tfoot>
+    </table>
+    
+</main>
+{{ end }}
+
+{{ define "stars" }}
+<span class="difficulty" data-tooltip="Easy difficulty">
+    {{ if (ge .Difficulty 1)}}
+        {{ svg "star-fill" true}}
+    {{ else }}
+        {{ svg "star" true}}
+    {{ end }}
+    {{ if (ge .Difficulty 2)}}
+        {{ svg "star-fill" true}}
+    {{ else }}
+        {{ svg "star" true}}
+    {{ end }}
+    {{ if (ge .Difficulty 3)}}
+        {{ svg "star-fill" true}}
+    {{ else }}
+        {{ svg "star" true}}
+    {{ end }}
+</span>
+{{ end }}
+
+{{ define "players" }}
+        {{ if (eq .Players 1)}}
+        <span class="players" data-tooltip="Individual">
+            {{ svg "person-fill" true}}
+        </span>
+        {{ else }}
+        <span class="players" data-tooltip="Group">
+            {{ svg "people-fill" true}}
+        </span>
+        {{ end }}
+{{ end }}

@@ -128,7 +128,7 @@ h1, h2, h3, h4, h5, h6{
     .grid.quests {
         grid-template-columns: repeat(auto-fit,minmax(0%,1fr));
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
         grid-auto-rows: 1fr;
         grid-column-gap: var(--block-spacing-horizontal);
         grid-row-gap: var(--block-spacing-vertical);
@@ -161,4 +161,12 @@ h1, h2, h3, h4, h5, h6{
 .grid.quests footer button {
     margin: 0;
 }
+
+/** Alerts **/
+
+article[role="alert"] {
+    margin-top: 0;
+    background: hsl(272.9, 14.8%, 41%);
+    padding: var(--block-spacing-horizontal);
+    color: white;
 }
