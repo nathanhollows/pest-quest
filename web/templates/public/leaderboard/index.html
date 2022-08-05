@@ -1,5 +1,43 @@
 {{ define "body" }}
 <main class="container">
     {{ template "flash" . }}
+    <hgroup>
+        <h1>Agents in Action</h1>
+        <h2>See who else is helping keep our spaces free of shenanigangs</h2>
+    </hgroup>
+    <article>
+        <table role="grid">
+            <thead>
+                <tr>
+                    <th scope="col">Position</th>
+                    <th scope="col">Agent</th>
+                    <th scope="col">Missions Completed</th>
+                    <th scope="col">Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Sage Barsony</td>
+                    <td>12</td>
+                    <td>3 years ago</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Agent Storm Front</td>
+                    <td>2</td>
+                    <td>2 months ago</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th scope="col">Position</th>
+                    <th scope="col">Agent</th>
+                    <td scope="col">Missions Completed</td>
+                    <td scope="col">Joined</td>
+                </tr>
+            </tfoot>
+        </table>
+    </article>
 </main>
 {{ end }}
