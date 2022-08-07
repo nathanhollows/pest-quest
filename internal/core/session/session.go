@@ -1,20 +1,32 @@
 package session
 
 import (
+	"encoding/hex"
 	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
 	"github.com/gorilla/securecookie"
+	"github.com/nathanhollows/pest-quest/internal/config"
 	"github.com/nathanhollows/pest-quest/internal/domain"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
-var cookieHandler = securecookie.New(
-	securecookie.GenerateRandomKey(64),
-	securecookie.GenerateRandomKey(32))
+var cookieHandler securecookie.SecureCookie
+
+func init() {
+	hash, err := hex.DecodeString(config.Cfg.Server.SessionHashKey)
+	if err != nil {
+		panic("The session could not be started. The SessionHashKey is invalid")
+	}
+	block, err := hex.DecodeString(config.Cfg.Server.SessionBlockKey)
+	if err != nil {
+		panic("The session could not be started. The SessionBlockKey is invalid")
+	}
+	cookieHandler = *securecookie.New(hash, block)
+}
 
 func GetUser(request *http.Request) (user domain.User) {
 	if cookie, err := request.Cookie("user"); err == nil {

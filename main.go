@@ -11,7 +11,6 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/gorilla/sessions"
 	"github.com/nathanhollows/pest-quest/internal/config"
 	"github.com/nathanhollows/pest-quest/internal/domain"
 	"github.com/nathanhollows/pest-quest/internal/filesystem"
@@ -30,18 +29,16 @@ func init() {
 	router.Use(middleware.StripSlashes)
 	router.Use(middleware.Compress(5))
 
-	var store sessions.Store = sessions.NewCookieStore([]byte(config.Cfg.Server.SessionKey))
-
 	db, err := gorm.Open(sqlite.Open(config.Cfg.Database.File), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
 
 	env = handlers.Env{
-		Session: store,
-		DB:      *db,
-		Data:    make(map[string]interface{}),
+		DB:   *db,
+		Data: make(map[string]interface{}),
 	}
+	env.Data["section"] = ""
 }
 
 func main() {

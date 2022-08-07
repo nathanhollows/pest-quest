@@ -9,9 +9,10 @@ import (
 
 type Config struct {
 	Server struct {
-		Port       string `yaml:"port" envconfig:"SERVER_PORT"`
-		Host       string `yaml:"host" envconfig:"SERVER_HOST"`
-		SessionKey string `yaml:"session_key" envconfig:"SESSION_KEY"`
+		Port            string `yaml:"port" envconfig:"SERVER_PORT"`
+		Host            string `yaml:"host" envconfig:"SERVER_HOST"`
+		SessionHashKey  string `yaml:"session_hash_key" envconfig:"SESSION_HASH_KEY"`
+		SessionBlockKey string `yaml:"session_block_key" envconfig:"SESSION_BLOCK_KEY"`
 	} `yaml:"server"`
 	Database struct {
 		Username string `yaml:"user" envconfig:"DB_USERNAME"`

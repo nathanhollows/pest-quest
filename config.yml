@@ -2,7 +2,10 @@
 server:
   host: "localhost"
   port: 8803
-  session_key: "1234567890"
+  # 64
+  session_hash_key: "aca30328ab6efa8b67502b8f7521ef36e5326590a6a5a2b85cb42d8e63c9d05e0b5314f463ad7ee3a77c0986b4721e20b32d88a7ca2674dad238ffc6a265fac5"
+  # 128
+  session_block_key: "66a081cedccbbb5ec9a706be22e4b2e2a9ca448602af6c40bdfa051f18baa384"
 
 # Database credentials
 database:
