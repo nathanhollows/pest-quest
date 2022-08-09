@@ -15,24 +15,22 @@ import (
 
 // AdviceIndex lists the advice available
 func AdviceIndex(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["title"] = "Sage Advice"
-	data["section"] = "advice"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["title"] = "Sage Advice"
+	env.Data["section"] = "advice"
 
 	advice := []domain.Advice{}
 	env.DB.Preload(clause.Associations).Find(&advice)
-	data["advice"] = advice
+	env.Data["advice"] = advice
 
-	return handlers.RenderAdmin(w, data, "admin/advice/index.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/advice/index.html")
 }
 
 // AdviceCreates shows the form for adding new advice, and also handles saving
 func AdviceCreate(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["title"] = "New Sage Advice"
-	data["section"] = "advice"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["title"] = "New Sage Advice"
+	env.Data["section"] = "advice"
 
 	log.Println("Hit AdviceCreate")
 	if r.Method == http.MethodPost {
@@ -51,13 +49,12 @@ func AdviceCreate(env *handlers.Env, w http.ResponseWriter, r *http.Request) err
 
 	}
 
-	return handlers.RenderAdmin(w, data, "admin/advice/create.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/advice/create.html")
 }
 
 // AdviceEdit shows the form for editing advice
 func AdviceEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["section"] = "advice"
+	env.Data["section"] = "advice"
 
 	advice := domain.Advice{}
 	res := env.DB.Where("id = ?", chi.URLParam(r, "id")).Find(&advice)
@@ -66,7 +63,7 @@ func AdviceEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) error
 		http.Redirect(w, r, helpers.URL("/admin/advice"), http.StatusTemporaryRedirect)
 		return nil
 	}
-	data["advice"] = advice
+	env.Data["advice"] = advice
 
 	// If the form has been submitted
 	if r.Method == http.MethodPost {
@@ -81,7 +78,7 @@ func AdviceEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) error
 		return nil
 	}
 
-	return handlers.RenderAdmin(w, data, "admin/advice/edit.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/advice/edit.html")
 }
 
 // AdviceUpdate saves the new values of Advice
@@ -114,9 +111,8 @@ func AdviceUpdate(env *handlers.Env, w http.ResponseWriter, r *http.Request) err
 
 // AdviceDelete deletes a piece of Advice
 func AdviceDelete(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["section"] = "advice"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["section"] = "advice"
 
-	return handlers.RenderAdmin(w, data, "admin/markers/index.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/markers/index.html")
 }

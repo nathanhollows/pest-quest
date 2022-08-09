@@ -10,8 +10,6 @@ import (
 
 // PreviewMD accepts MD and returns HTML
 func PreviewMD(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	w.Header().Set("Content-Type", "text/html")
-
 	if r.Method == http.MethodPost {
 
 		type markdown struct {

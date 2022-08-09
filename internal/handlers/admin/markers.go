@@ -14,26 +14,24 @@ import (
 
 // Markers allows markers to be added or removed from the map.
 func MarkersIndex(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["section"] = "markers"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["section"] = "markers"
 
 	var markers []domain.Location
 	env.DB.Preload(clause.Associations).Find(&markers)
-	data["markers"] = markers
+	env.Data["markers"] = markers
 
-	return handlers.RenderAdmin(w, data, "admin/markers/index.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/markers/index.html")
 }
 
 // MarkersAdd shows the form for adding a new marker.
 func MarkersCreate(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["section"] = "markers"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["section"] = "markers"
 
 	types := []domain.MarkerType{}
 	env.DB.Find(&types)
-	data["types"] = types
+	env.Data["types"] = types
 
 	if r.Method == http.MethodPost {
 		r.ParseForm()
@@ -45,13 +43,12 @@ func MarkersCreate(env *handlers.Env, w http.ResponseWriter, r *http.Request) er
 		}
 	}
 
-	return handlers.RenderAdmin(w, data, "admin/markers/create.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/markers/create.html")
 }
 
 // Markers allows markers to be added or removed from the map.
 func MarkersEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["section"] = "markers"
+	env.Data["section"] = "markers"
 
 	marker := domain.Location{}
 	res := env.DB.Where("id = ?", chi.URLParam(r, "id")).Find(&marker)
@@ -60,11 +57,11 @@ func MarkersEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) erro
 		http.Redirect(w, r, helpers.URL("/admin/markers"), http.StatusNotFound)
 		return nil
 	}
-	data["marker"] = marker
+	env.Data["marker"] = marker
 
 	types := []domain.MarkerType{}
 	env.DB.Find(&types)
-	data["types"] = types
+	env.Data["types"] = types
 
 	// If the form has been submitted
 	if r.Method == http.MethodPost {
@@ -76,7 +73,7 @@ func MarkersEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) erro
 		}
 	}
 
-	return handlers.RenderAdmin(w, data, "admin/markers/edit.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/markers/edit.html")
 }
 
 // MarkersUpdate saves the new values of a marker
@@ -109,9 +106,8 @@ func MarkersUpdate(env *handlers.Env, w http.ResponseWriter, r *http.Request) er
 
 // MarkersDelete removes a marker from the map.
 func MarkersDelete(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["section"] = "markers"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["section"] = "markers"
 
-	return handlers.RenderAdmin(w, data, "admin/markers/index.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/markers/index.html")
 }

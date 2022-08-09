@@ -14,24 +14,22 @@ import (
 
 // BlogIndex shows all the blog posts
 func BlogIndex(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["title"] = "Blog"
-	data["section"] = "blog"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["title"] = "Blog"
+	env.Data["section"] = "blog"
 
 	blogs := []domain.Blog{}
 	env.DB.Preload(clause.Associations).Find(&blogs)
-	data["blogs"] = blogs
+	env.Data["blogs"] = blogs
 
-	return handlers.RenderAdmin(w, data, "admin/blog/index.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/blog/index.html")
 }
 
 // BlogCreate shows the form for creating new posts, and also creates them
 func BlogCreate(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["title"] = "New blog post"
-	data["section"] = "blog"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["title"] = "New blog post"
+	env.Data["section"] = "blog"
 
 	if r.Method == http.MethodPost {
 		r.ParseForm()
@@ -43,13 +41,12 @@ func BlogCreate(env *handlers.Env, w http.ResponseWriter, r *http.Request) error
 		}
 	}
 
-	return handlers.RenderAdmin(w, data, "admin/blog/create.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/blog/create.html")
 }
 
 // BlogEdit shows the form for editing a blog post
 func BlogEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["section"] = "blog"
+	env.Data["section"] = "blog"
 
 	blog := domain.Blog{}
 	res := env.DB.Where("url = ?", chi.URLParam(r, "url")).Find(&blog)
@@ -58,7 +55,7 @@ func BlogEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
 		http.Redirect(w, r, helpers.URL("/admin/blog"), http.StatusTemporaryRedirect)
 		return nil
 	}
-	data["blog"] = blog
+	env.Data["blog"] = blog
 
 	// If the form has been submitted
 	if r.Method == http.MethodPost {
@@ -73,7 +70,7 @@ func BlogEdit(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
 		return nil
 	}
 
-	return handlers.RenderAdmin(w, data, "admin/blog/edit.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/blog/edit.html")
 }
 
 // BlogUpdate saves the new values of a blog
@@ -106,9 +103,8 @@ func BlogUpdate(env *handlers.Env, w http.ResponseWriter, r *http.Request) error
 
 // BlogDelete deletes a blog.
 func BlogDelete(env *handlers.Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["section"] = "blog"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["section"] = "blog"
 
-	return handlers.RenderAdmin(w, data, "admin/markers/index.html")
+	return handlers.RenderAdmin(w, env.Data, "admin/markers/index.html")
 }
