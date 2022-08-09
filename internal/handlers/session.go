@@ -14,9 +14,7 @@ import (
 
 // Login handles user logins
 func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
-	w.Header().Set("Content-Type", "text/html")
-	data := make(map[string]interface{})
-	data["section"] = "session"
+	env.Data["section"] = "session"
 
 	if r.Method == http.MethodPost {
 		email := r.FormValue("email")
@@ -34,8 +32,8 @@ func Login(env *Env, w http.ResponseWriter, r *http.Request) error {
 		}
 	}
 
-	data["messages"] = flash.Get(w, r)
-	return render(w, data, "session/login.html")
+	env.Data["messages"] = flash.Get(w, r)
+	return render(w, env.Data, "session/login.html")
 }
 
 // Logout destroys the user session
@@ -50,10 +48,8 @@ func Logout(env *Env, w http.ResponseWriter, r *http.Request) error {
 
 // Register creates a new user
 func Register(env *Env, w http.ResponseWriter, r *http.Request) error {
-	w.Header().Set("Content-Type", "text/html")
-	data := make(map[string]interface{})
-	data["section"] = "session"
-	data["username"] = agentname.Generate()
+	env.Data["section"] = "session"
+	env.Data["username"] = agentname.Generate()
 
 	r.ParseForm()
 
@@ -85,13 +81,12 @@ func Register(env *Env, w http.ResponseWriter, r *http.Request) error {
 		flash.Set(w, r, flash.Message{Message: "Please accept the terms and conditions."})
 	}
 
-	data["messages"] = flash.Get(w, r)
-	return render(w, data, "session/register.html")
+	env.Data["messages"] = flash.Get(w, r)
+	return render(w, env.Data, "session/register.html")
 }
 
 // Suggestname suggests a new name
 func SuggestName(env *Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["name"] = agentname.Generate()
-	return renderBlank(w, data, "session/name.html")
+	env.Data["name"] = agentname.Generate()
+	return renderBlank(w, env.Data, "session/name.html")
 }

@@ -9,11 +9,10 @@ import (
 
 // Map shows locations of interest for the public and for players
 func Map(env *Env, w http.ResponseWriter, r *http.Request) error {
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["section"] = "map"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["section"] = "map"
 
-	data["markers"] = markers.GetPublished(env.DB)
+	env.Data["markers"] = markers.GetPublished(env.DB)
 
-	return render(w, data, "map/index.html")
+	return render(w, env.Data, "map/index.html")
 }

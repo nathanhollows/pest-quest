@@ -13,39 +13,26 @@ import (
 // Blog displays the most recent posts.
 func Blog(env *Env, w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "text/html")
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["section"] = "blog"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["section"] = "blog"
 
-	data["posts"] = blog.GetLatest(env.DB, 10)
+	env.Data["posts"] = blog.GetLatest(env.DB, 10)
 
-	_, err := env.Session.Get(r, "uid")
-	if err != nil {
-		_, err = startSession(env.Session, r, w)
-	}
-
-	return render(w, data, "blog/index.html")
+	return render(w, env.Data, "blog/index.html")
 }
 
 // BlogPost display a single post.
 func BlogPost(env *Env, w http.ResponseWriter, r *http.Request) error {
-	w.Header().Set("Content-Type", "text/html")
-	data := make(map[string]interface{})
-	data["messages"] = flash.Get(w, r)
-	data["section"] = "blog"
+	env.Data["messages"] = flash.Get(w, r)
+	env.Data["section"] = "blog"
 
 	post := domain.Blog{}
 	res := env.DB.Find(&post, "url = ?", chi.URLParam(r, "title"))
-	data["post"] = post
+	env.Data["post"] = post
 
 	if res.RowsAffected == 0 {
 		return StatusError{http.StatusNotFound, errors.New("could not find the blog post")}
 	}
 
-	_, err := env.Session.Get(r, "uid")
-	if err != nil {
-		_, err = startSession(env.Session, r, w)
-	}
-
-	return render(w, data, "blog/post.html")
+	return render(w, env.Data, "blog/post.html")
 }

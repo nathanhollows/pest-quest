@@ -64,6 +64,7 @@ type Env struct {
 }
 
 func (h HandlePublic) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	h.Env.Data["session"] = session.GetUser(r)
 	err := h.H(h.Env, w, r)
 	if err != nil {
 		switch e := err.(type) {
@@ -86,6 +87,8 @@ func (h HandleAdmin) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if !user.Admin {
 		flash.Set(w, r, flash.Message{Message: "You don't have access to that"})
 		http.Redirect(w, r, helpers.URL("denied"), http.StatusFound)
+	} else {
+		h.Env.Data["session"] = session.GetUser(r)
 	}
 
 	err := h.H(h.Env, w, r)
